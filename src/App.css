@@ -1,0 +1,19 @@
+main {
+  margin-left: 2rem;
+}
+
+.App-header {
+  margin-bottom: 2rem;
+  background-color: #282c34;
+  height: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+#download {
+  margin-bottom: 3rem;
+}
