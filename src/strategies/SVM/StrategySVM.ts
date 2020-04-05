@@ -1,4 +1,4 @@
-import Strategy from "./Strategy";
+import Strategy from "./../Strategy";
 
 export default class StrategySVM implements Strategy{
 
@@ -44,10 +44,7 @@ export default class StrategySVM implements Strategy{
     setParams(params: any) {
         return {
             C: params.C,
-            tol: params.tol,
-            alphatol: params.alphatol,
             maxiter: params.maxiter,
-            kernel: params.kernel,
             numpasses: params.numpasses
         };
     }
@@ -58,8 +55,6 @@ export default class StrategySVM implements Strategy{
         let yR: number[] = [];
         let xW: number[] = [];
         let yW: number[] = [];
-        let colorR: string = 'green';
-        let colorW: string = 'red';
         data.forEach((couple) => {
             if(couple[2] === 1){
                 xR.push(couple[0]);
@@ -70,33 +65,29 @@ export default class StrategySVM implements Strategy{
             }
         });
         return {
-                pointXR: xR,
-                pointYR: yR,
-                pointXW: xW,
-                pointYW: yW,
-                pointLineX: [],
-                pointLineY: [],
-                colorR: colorR,
-                colorW: colorW
+                pointsXR: xR,
+                pointsYR: yR,
+                pointsXW: xW,
+                pointsYW: yW,
+                pointsLineX: [],
+                pointsLineY: []
         };
     }
 
     // Data parsed from Array to point of a straight line of the graph
     parseDatatoLine(graph: any,coefficients: number[]) {
         let lineY: number[] = [];
-        const lineX: number[] = [...graph.pointXR, ...graph.pointXW];
+        const lineX: number[] = [...graph.pointsXR, ...graph.pointsXW];
         lineX.forEach((element) => {
             lineY.push( ( -coefficients[1]/coefficients[2] * element) + -coefficients[0]/coefficients[2] );
         });
         return {
-            pointXR: graph.pointXR,
-            pointYR: graph.pointYR,
-            pointXW: graph.pointXW,
-            pointYW: graph.pointYW,
-            pointLineX: lineX,
-            pointLineY: lineY,
-            colorR: graph.colorR,
-            colorW: graph.colorW
+            pointsXR: graph.pointsXR,
+            pointsYR: graph.pointsYR,
+            pointsXW: graph.pointsXW,
+            pointsYW: graph.pointsYW,
+            pointsLineX: lineX,
+            pointsLineY: lineY
         };
     }
     

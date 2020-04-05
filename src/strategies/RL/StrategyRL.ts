@@ -1,9 +1,9 @@
-import Strategy from "./Strategy";
+import Strategy from "./../Strategy";
 import regression, { DataPoint } from 'regression';
 
 export default class StrategyRL implements Strategy{
     
-    public static parseArrayDataPoint(data: number[][]) {
+    static parseArrayDataPoint(data: number[][]) {
         let datapoint: DataPoint[] = [];
         data.forEach( (p) => {
             let point: DataPoint = [0,0];
@@ -32,7 +32,7 @@ export default class StrategyRL implements Strategy{
         }
      */
     setParams(params: any) {
-        return {order: params[0], precision: params[1]};
+        return {order: params.order, precision: params.precision};
     }
 
     /** Data parsed from Array to point of the graph */
@@ -43,34 +43,23 @@ export default class StrategyRL implements Strategy{
             xR.push(couple[0]);
             yR.push(couple[1]);
         });
-        const colorR: string = 'orange';
         return {
-                pointXR: xR,
-                pointYR: yR,
-                pointXW: [],
-                pointYW: [],
-                pointLineX: [],
-                pointLineY: [],
-                colorR: colorR,
-                colorW: ''
+                pointsX: xR,
+                pointsY: yR,
+                pointsLineY: []
         };
     }
 
     /** Data parsed from Array to point of a straight line of the graph */
     parseDatatoLine(graph: any,coefficients: number[]) {
         let lineY: number[] = [];
-        graph.pointXR.forEach((element: number) => {
+        graph.pointsX.forEach((element: number) => {
             lineY.push( ( coefficients[0] * element) + coefficients[1] );
         });
         return {
-            pointXR: graph.pointXR,
-            pointYR: graph.pointYR,
-            pointXW: graph.pointXW,
-            pointYW: graph.pointYW,
-            pointLineX: graph.pointXR,
-            pointLineY: lineY,
-            colorR: graph.colorR,
-            colorW: graph.colorW
+            pointsX: graph.pointsX,
+            pointsY: graph.pointsY,
+            pointsLineY: lineY
         };
     }
     

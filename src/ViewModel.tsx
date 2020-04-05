@@ -3,30 +3,17 @@ import './App.css';
 import View from './View';
 import Model from './Model';
 import { observer } from "mobx-react";
+import { options, algview, graph } from './strategies/Strategies';
 
 @observer
 export default class ViewModel extends React.Component {
     
     private model: Model = new Model();
-    private algorithm: string = 'Regressione Lineare';
-    private prec: number = 2;
-    private C: number = 1.0;
-    private tol: number = 1e-4;
-    private atol: number = 1e-7;
-    private maxiter: number = 10000;
-    private numpass: number = 10;
-    private kernel: string = 'linear';
+    private algorithm: string = 'RL';
     state = {
-        graph: {
-            pointXR: [],
-            pointYR: [],
-            pointXW: [],
-            pointYW: [],
-            pointLineX: [],
-            pointLineY: [],
-            colorR: '',
-            colorW: ''
-        }
+        algView: algview[''], 
+        config: options[''],
+        graph: graph['']
     }
 
     static validateFile(text: string){
@@ -78,64 +65,18 @@ export default class ViewModel extends React.Component {
 
     clickSelectAlg() {
         this.model.setAlgorithm(this.algorithm);
+        this.setState({ config: options[this.algorithm] });
+        this.setState({ algView: algview[this.algorithm] });
+        this.setState({ graph: graph[this.algorithm] });
         document.getElementById('alg')?.setAttribute('disabled','true');
-        if( this.algorithm === 'Regressione Lineare')
-            document.getElementById('RLopt')?.setAttribute('style','display: block');
-        else
-            document.getElementById('SVMopt')?.setAttribute('style','display: block');
     }
 
-    setPrec(i: number) {
-        this.prec = i;
-        this.clickSelectPrec();
+    setConfOpt(conf: any) {
+        this.setState({config: conf});
     }
-
-    setC(i: number) {
-        this.C = i;
-        this.clickSelectSVMop();
-    }
-
-    setTol(i: number) {
-        this.tol = i;
-        this.clickSelectSVMop();
-    }
-
-    setAtol(i: number) {
-        this.atol = i;
-        this.clickSelectSVMop();
-    }
-
-    setMacit(i: number) {
-        this.maxiter = i;
-        this.clickSelectSVMop();
-    }
-
-    setKernel(i: string) {
-        this.kernel = i;
-        this.clickSelectSVMop();
-    }
-
-    setNumpas(i: number) {
-        this.numpass = i;
-        this.clickSelectSVMop();
-    }
-
-    clickSelectPrec() {
-        this.model.setOptions([2,this.prec]);
-    }
-
-    clickSelectSVMop() {
-        this.model.setOptions({ 
-            C: this.C,
-            tol: this.tol,
-            alphatol: this.atol,
-            maxiter: this.maxiter,
-            kernel: this.kernel,
-            numpasses: this.numpass
-        });
-    }
-
+    
     buttonTrain() {
+        this.model.setOptions(this.state.config);
         this.model.train();
         this.setState({ graph: this.model.parseDatatoLine(this.state.graph) });
     }
@@ -146,26 +87,14 @@ export default class ViewModel extends React.Component {
                 <View 
                     selectAlg = { (event) => {this.setAlgorithm(event.target.value)} }
                     buttonSelectAlg = {() => {this.clickSelectAlg()} }
-                    buttonInput = {(event) => {this.buttonInput(event.target)}}
-                    selectPrec = {(event) => {this.setPrec(event.target.value)}}
-                    selectC = {(event) => {this.setC(event.target.value)}}
-                    selectTol = {(event) => {this.setC(event.target.value)}}
-                    selectAtol = {(event) => {this.setC(event.target.value)}}
-                    selectMaxit = {(event) => {this.setC(event.target.value)}}
-                    selectKernel = {(event) => {this.setC(event.target.value)}}
-                    selectNumpas = {(event) => {this.setC(event.target.value)}}
+                    buttonInput = {(event) => {this.buttonInput(event.target)}} 
                     data = {this.model.getData()}
-                    xPointsR = {this.state.graph.pointXR}
-                    yPointsR = {this.state.graph.pointYR}
-                    xPointsW = {this.state.graph.pointXW}
-                    yPointsW = {this.state.graph.pointYW}
-                    colorR = {this.state.graph.colorR}
-                    colorW = {this.state.graph.colorW}
                     buttonTrain = {() => this.buttonTrain()}
                     predictor = {this.model.getPredictor().function}
-                    newxPoints = {this.state.graph.pointLineX}
-                    newyPoints = {this.state.graph.pointLineY}
                     buttonDownload = {() => {this.model.downloadPredictor()}}
+                    AlgView = {this.state.algView}
+                    setConf = {this.setConfOpt.bind(this)}
+                    graphPt = {this.state.graph}
                 />
             </div>
         );

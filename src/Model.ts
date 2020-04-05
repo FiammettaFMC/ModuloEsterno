@@ -1,7 +1,6 @@
-import Strategy from './Strategy';
-import StrategyRL from './StrategyRL';
-import StrategySVM from './StrategySVM';
+import Strategy from './strategies/Strategy';
 import { observable } from 'mobx';
+import { strategies } from './strategies/Strategies';
 
 export default class Model {
     
@@ -10,8 +9,7 @@ export default class Model {
         algorithm: string,
         coefficients: number[],
         function: string,
-        options?: any,
-        accuracy?: {}
+        options?: any
     } = {
         algorithm: '',
         coefficients: [],
@@ -39,10 +37,7 @@ export default class Model {
     /** Set the algorithm to use thanks to the Context*/
     public setAlgorithm(alg: string){
         this.predictor.algorithm = alg;
-        if(alg === 'Regressione Lineare')
-            this.strategy = new StrategyRL();
-        else
-            this.strategy = new StrategySVM();
+        this.strategy = strategies[alg];
     }
 
     public parseDatatoChart(array: number[][]){
@@ -67,7 +62,6 @@ export default class Model {
     "Coefficients": "${this.predictor.coefficients}",
     "Function": "${this.predictor.function}",
     "Options": "${this.predictor.options ? this.predictor.options : ''}",
-    "Accuracy": "${this.predictor.accuracy ? this.predictor.accuracy : ''}"
 }`; // string output
         const file = new File([text], 'Training.json', { type: 'text/json;charset=utf-8' });
         FileSaver.saveAs(file); // download
