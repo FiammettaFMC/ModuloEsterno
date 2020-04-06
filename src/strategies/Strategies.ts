@@ -1,10 +1,9 @@
 import Strategy from './Strategy';
 import StrategyRL from './RL/StrategyRL';
 import StrategySVM from './SVM/StrategySVM';
-import AlgViewRL from './RL/AlgViewRL';
-import AlgViewSVM from './SVM/AlgViewSVM';
+import AlgViewRL from './RL/AlgorithmViewRL';
+import AlgViewSVM from './SVM/AlgorithmViewSVM';
 import React from 'react';
-import AlgView from './AlgView';
 
 export const strategies: { [index: string]: Strategy } = {
     'RL': new StrategyRL(),
@@ -12,7 +11,6 @@ export const strategies: { [index: string]: Strategy } = {
 };
 
 export const algview: { [index: string]: typeof React.Component } = {
-    '': AlgView,
     'RL': AlgViewRL,
     'SVM': AlgViewSVM
 };
@@ -27,22 +25,5 @@ export const options: { [index: string]: any} = {
         C: 1.0,
         maxiter: 10000,
         numpass: 10
-    }
-};
-
-export const graph: { [index: string]: any} = {
-    '': {},
-    'RL': {
-        pointsX: [],
-        pointsY: [],
-        pointsLineY: []
-    },
-    'SVM': {
-        pointsXR: [],
-        pointsYR: [],
-        pointsXW: [],
-        pointsYW: [],
-        pointsLineX: [],
-        pointsLineY: []
     }
 };

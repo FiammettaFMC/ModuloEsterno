@@ -3,7 +3,7 @@ import './App.css';
 import View from './View';
 import Model from './Model';
 import { observer } from "mobx-react";
-import { options, algview, graph } from './strategies/Strategies';
+import { options, algview } from './strategies/Strategies';
 
 @observer
 export default class ViewModel extends React.Component {
@@ -11,9 +11,9 @@ export default class ViewModel extends React.Component {
     private model: Model = new Model();
     private algorithm: string = 'RL';
     state = {
-        algView: algview[''], 
+        algView: undefined, 
         config: options[''],
-        graph: graph['']
+        graph: []
     }
 
     static validateFile(text: string){
@@ -25,7 +25,7 @@ export default class ViewModel extends React.Component {
     }
 
     /** Data parsed from string to Array */
-    static parseCSV(text: string) {
+    static parseCSVtoData(text: string) {
         /* csv delimiters */
         let row = "\n";
         let field = ",";
@@ -43,15 +43,15 @@ export default class ViewModel extends React.Component {
         return result;
     }
 
-    buttonInput(input: any) {
+    loadData(input: any) {
         const reader = new FileReader(); // declare file reader
         let array: number[][] = [];
         reader.readAsText(input.files[0]); // read file
         reader.onload = (event) => { // when loaded (async?)
             const goodFormation: boolean = ViewModel.validateFile(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
             if(goodFormation){
-                array = ViewModel.parseCSV(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
-                this.model.loadData(array);
+                array = ViewModel.parseCSVtoData(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
+                this.model.setData(array);
                 this.setState({ graph: this.model.parseDatatoChart(array) });
             } else{
                 alert('Dati non formattati correttamente!');
@@ -63,19 +63,19 @@ export default class ViewModel extends React.Component {
         this.algorithm = alg;
     }
 
-    clickSelectAlg() {
+    selectAlgorithm() {
         this.model.setAlgorithm(this.algorithm);
         this.setState({ config: options[this.algorithm] });
         this.setState({ algView: algview[this.algorithm] });
-        this.setState({ graph: graph[this.algorithm] });
+        // this.setState({ graph: graph[this.algorithm] });
         document.getElementById('alg')?.setAttribute('disabled','true');
     }
 
-    setConfOpt(conf: any) {
+    setConfig(conf: any) {
         this.setState({config: conf});
     }
     
-    buttonTrain() {
+    train() {
         this.model.setOptions(this.state.config);
         this.model.train();
         this.setState({ graph: this.model.parseDatatoLine(this.state.graph) });
@@ -86,14 +86,14 @@ export default class ViewModel extends React.Component {
             <div>
                 <View 
                     selectAlg = { (event) => {this.setAlgorithm(event.target.value)} }
-                    buttonSelectAlg = {() => {this.clickSelectAlg()} }
-                    buttonInput = {(event) => {this.buttonInput(event.target)}} 
+                    buttonSelectAlg = {() => {this.selectAlgorithm()} }
+                    buttonInput = {(event) => {this.loadData(event.target)}} 
                     data = {this.model.getData()}
-                    buttonTrain = {() => this.buttonTrain()}
+                    buttonTrain = {() => this.train()}
                     predictor = {this.model.getPredictor().function}
                     buttonDownload = {() => {this.model.downloadPredictor()}}
                     AlgView = {this.state.algView}
-                    setConf = {this.setConfOpt.bind(this)}
+                    setConf = {this.setConfig.bind(this)}
                     graphPt = {this.state.graph}
                 />
             </div>

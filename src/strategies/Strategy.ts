@@ -1,6 +1,7 @@
+import Predictor from "../Predictor";
+
 export default interface Strategy {
-    train(dataset: number[][],options: any): any;
-    setParams(params: any): any;
-    parseDatatoChart(dataset: number[][]): any;
-    parseDatatoLine(graph: any,coefficients: number[]): any;
+    train(dataset: number[][],options: any): Predictor;
+    datatoChart(dataset: number[][]): number[][];
+    datatoLine(graph: number[][],coefficients: number[]): number[][];
 }

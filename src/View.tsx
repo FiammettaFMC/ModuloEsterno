@@ -9,16 +9,26 @@ interface Actions {
     buttonTrain: () => void,
     predictor: string,
     buttonDownload: () => void,
-    AlgView: typeof React.Component,
+    AlgView?: typeof React.Component,
     setConf: (config: any) => void,
     graphPt: {}
 }
 
 export default class View extends React.Component<Actions> {
 
+    renderAlgView(){
+        if(this.props.AlgView)
+            return (<this.props.AlgView 
+                setConf = {this.props.setConf}
+                graphPt = {this.props.graphPt}
+            />);
+        else
+            return (<div></div>);
+    }
+
     render(){
         const { buttonSelectAlg, selectAlg, buttonInput, data, buttonTrain,
-                predictor, buttonDownload, AlgView, setConf, graphPt } = this.props;
+                predictor, buttonDownload} = this.props;
         return (
             <div className="App">
             <header className="App-header">
@@ -43,10 +53,7 @@ export default class View extends React.Component<Actions> {
 
                 <p>{data}</p>
 
-                <AlgView 
-                    setConf = {setConf}
-                    graphPt = {graphPt}
-                />
+                {this.renderAlgView()}
 
                 <input
                     type="button"

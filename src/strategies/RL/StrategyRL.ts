@@ -1,9 +1,10 @@
 import Strategy from "./../Strategy";
 import regression, { DataPoint } from 'regression';
+import Predictor from "../../Predictor";
 
 export default class StrategyRL implements Strategy{
     
-    static parseArrayDataPoint(data: number[][]) {
+    static parseArrayToDataPoint(data: number[][]) {
         let datapoint: DataPoint[] = [];
         data.forEach( (p) => {
             let point: DataPoint = [0,0];
@@ -15,52 +16,32 @@ export default class StrategyRL implements Strategy{
     }
     
     train(dataset: number[][],options: any) {
-        const datapoint = StrategyRL.parseArrayDataPoint(dataset);
-        return {
-            algorithm: 'Regressione Lineare',
-            coefficients: regression.linear(datapoint, options).equation,
-            function: regression.linear(datapoint, options).string,
-            options: options,
-            accuracy: {}
-        };
-    }
-
-    /* Options:
-        {
-            order: numero di paramerti
-            precision: numero di cifre dopo la virgola
-        }
-     */
-    setParams(params: any) {
-        return {order: params.order, precision: params.precision};
+        const datapoint = StrategyRL.parseArrayToDataPoint(dataset);
+        return new Predictor( 'Regressione Lineare', 
+                              regression.linear(datapoint, options).equation, 
+                              regression.linear(datapoint, options).string,
+                              options);
+    
     }
 
     /** Data parsed from Array to point of the graph */
-    parseDatatoChart(data: number[][]){
+    datatoChart(data: number[][]){
         let xR: number[] = [];
         let yR: number[] = [];       
         data.forEach((couple) => {
             xR.push(couple[0]);
             yR.push(couple[1]);
         });
-        return {
-                pointsX: xR,
-                pointsY: yR,
-                pointsLineY: []
-        };
+        return [xR, yR, []];
     }
 
     /** Data parsed from Array to point of a straight line of the graph */
-    parseDatatoLine(graph: any,coefficients: number[]) {
+    datatoLine(graph: number[][],coefficients: number[]) {
         let lineY: number[] = [];
-        graph.pointsX.forEach((element: number) => {
+        graph[0].forEach((element: number) => {
             lineY.push( ( coefficients[0] * element) + coefficients[1] );
         });
-        return {
-            pointsX: graph.pointsX,
-            pointsY: graph.pointsY,
-            pointsLineY: lineY
-        };
+        return [graph[0], graph[1], lineY];
     }
     
 }

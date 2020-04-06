@@ -3,18 +3,27 @@ import Plot from 'react-plotlyjs-ts';
 
 interface Actions {
     setConf: (conf: any) => void,
-    graphPt: {
-        pointsXR: [],
-        pointsYR: [],
-        pointsXW: [],
-        pointsYW: [],
-        pointsLineX: [],
-        pointsLineY: []
-    }
+    graphPt: number[][] 
+        // 0: pointsXR,
+        // 1: pointsYR,
+        // 2: pointsXW,
+        // 3: pointsYW,
+        // 4: pointsLineX,
+        // 5: pointsLineY
 }
 
-export default class AlgViewSVM extends React.Component<Actions> {
+export default class AlgrithmViewSVM extends React.Component<Actions> {
     
+    /** Options:
+    {
+        C = 1.0; For C, Higher = you trust your data more. Lower = more regularization. Should be in range of around 1e-2 ... 1e5 at most.
+        tol = 1e-4; // do not touch this unless you're pro
+        alphatol = 1e-7; // used for pruning non-support vectors. do not touch unless you're pro
+        maxiter // if you have a larger problem, you may need to increase this
+        kernel // kernel type
+        numpasses = 10; // increase this for higher precision of the result. (but slower)
+    }
+    */
     private config: {
         C: number,
         maxiter: number,
@@ -33,24 +42,24 @@ export default class AlgViewSVM extends React.Component<Actions> {
                 <Plot
                     data={[
                         {
-                            x: graphPt.pointsXR,
-                            y: graphPt.pointsYR,
+                            x: graphPt[0],
+                            y: graphPt[1],
                             type: 'scatter',
                             mode: 'markers',
                             marker: {color: `green` },
                             name: 'Punti',
                         },
                         {
-                            x: graphPt.pointsXW,
-                            y: graphPt.pointsYW,
+                            x: graphPt[2],
+                            y: graphPt[3],
                             type: 'scatter',
                             mode: 'markers',
                             marker: {color: `red` },
                             name: 'Punti',
                         },
                         {   
-                            x: graphPt.pointsLineX,
-                            y: graphPt.pointsLineY,
+                            x: graphPt[4],
+                            y: graphPt[5],
                             type: 'lines',
                             mode: 'lines',
                             line: {color: 'blue'},

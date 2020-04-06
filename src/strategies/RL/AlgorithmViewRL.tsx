@@ -3,14 +3,13 @@ import Plot from 'react-plotlyjs-ts';
 
 interface Actions {
     setConf: (conf: any) => void,
-    graphPt: {
-        pointsX: [],
-        pointsY: [],
-        pointsLineY: []
-    }
+    graphPt: number[][]
+        // 0: pointsX,
+        // 1: pointsY,
+        // 2: pointsLineY
 }
 
-export default class AlgViewRL extends React.Component<Actions> {
+export default class AlgorithmViewRL extends React.Component<Actions> {
     private config: {
         order: number,
         precision: number
@@ -27,16 +26,16 @@ export default class AlgViewRL extends React.Component<Actions> {
                 <Plot
                     data={[
                         {
-                            x: graphPt.pointsX,
-                            y: graphPt.pointsY,
+                            x: graphPt[0],
+                            y: graphPt[1],
                             type: 'scatter',
                             mode: 'markers',
                             marker: {color: 'orange' },
                             name: 'Punti',
                         },
                         {   
-                            x: graphPt.pointsX,
-                            y: graphPt.pointsLineY,
+                            x: graphPt[0],
+                            y: graphPt[2],
                             type: 'lines',
                             mode: 'lines',
                             line: {color: 'blue'},
