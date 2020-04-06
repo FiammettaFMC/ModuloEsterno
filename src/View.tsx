@@ -19,9 +19,9 @@ export default class View extends React.Component<Actions> {
     renderAlgView(){
         if(this.props.AlgView)
             return (<this.props.AlgView 
-                setConf = {this.props.setConf}
-                graphPt = {this.props.graphPt}
-            />);
+                        setConf = {this.props.setConf}
+                        graphPt = {this.props.graphPt}
+                    />);
         else
             return (<div></div>);
     }

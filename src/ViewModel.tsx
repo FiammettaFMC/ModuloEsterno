@@ -3,7 +3,7 @@ import './App.css';
 import View from './View';
 import Model from './Model';
 import { observer } from "mobx-react";
-import { options, algview } from './strategies/Strategies';
+import { algview } from './strategies/Strategies';
 
 @observer
 export default class ViewModel extends React.Component {
@@ -12,7 +12,6 @@ export default class ViewModel extends React.Component {
     private algorithm: string = 'RL';
     state = {
         algView: undefined, 
-        config: options[''],
         graph: []
     }
 
@@ -45,14 +44,14 @@ export default class ViewModel extends React.Component {
 
     loadData(input: any) {
         const reader = new FileReader(); // declare file reader
-        let array: number[][] = [];
+        let data: number[][] = [];
         reader.readAsText(input.files[0]); // read file
         reader.onload = (event) => { // when loaded (async?)
             const goodFormation: boolean = ViewModel.validateFile(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
             if(goodFormation){
-                array = ViewModel.parseCSVtoData(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
-                this.model.setData(array);
-                this.setState({ graph: this.model.parseDatatoChart(array) });
+                data = ViewModel.parseCSVtoData(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
+                this.model.setData(data);
+                this.setState({ graph: this.model.datatoChart(data) });
             } else{
                 alert('Dati non formattati correttamente!');
             }
@@ -65,20 +64,17 @@ export default class ViewModel extends React.Component {
 
     selectAlgorithm() {
         this.model.setAlgorithm(this.algorithm);
-        this.setState({ config: options[this.algorithm] });
         this.setState({ algView: algview[this.algorithm] });
-        // this.setState({ graph: graph[this.algorithm] });
         document.getElementById('alg')?.setAttribute('disabled','true');
     }
 
     setConfig(conf: any) {
-        this.setState({config: conf});
+        this.model.setOptions(conf);
     }
     
     train() {
-        this.model.setOptions(this.state.config);
         this.model.train();
-        this.setState({ graph: this.model.parseDatatoLine(this.state.graph) });
+        this.setState({ graph: this.model.datatoLine(this.state.graph) });
     }
     
     render() {

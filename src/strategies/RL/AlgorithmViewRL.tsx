@@ -10,7 +10,7 @@ interface Actions {
 }
 
 export default class AlgorithmViewRL extends React.Component<Actions> {
-    private config: {
+    private options: {
         order: number,
         precision: number
     } = {
@@ -48,14 +48,14 @@ export default class AlgorithmViewRL extends React.Component<Actions> {
                 <h3>Choose the algorithm options (if you want)</h3>
                 <div id="RLopt">
                     <span>Choose the precision: </span>
-                    <select defaultValue={2} onChange={(event) => {this.config.precision = Number(event.target.value)}} >
+                    <select defaultValue={2} onChange={(event) => {this.options.precision = Number(event.target.value)}} >
                         <option value='1'>1</option>
                         <option value='2'>2</option>
                         <option value='3'>3</option>
                         <option value='4'>4</option>
                         <option value='5'>5</option>
                     </select>
-                    <button onClick= {() => setConf(this.config)}>Confirm options</button>
+                    <button onClick= {() => {setConf(this.options)}}>Confirm options</button>
                 </div>
             </div>
         );

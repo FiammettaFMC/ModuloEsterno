@@ -24,7 +24,7 @@ export default class AlgrithmViewSVM extends React.Component<Actions> {
         numpasses = 10; // increase this for higher precision of the result. (but slower)
     }
     */
-    private config: {
+    private options: {
         C: number,
         maxiter: number,
         numpass: number
@@ -70,21 +70,21 @@ export default class AlgrithmViewSVM extends React.Component<Actions> {
                 />
                
                 <h3 id="options" >Choose the algorithm options (if you want)</h3>
-                <form id="SVMopt">
+                <div id="SVMopt">
                     <label>C:</label>
-                    <input type="number" id="C" defaultValue="1.0" onChange={(event) => {this.config.C = Number(event.target.value)}} /> 
+                    <input type="number" id="C" defaultValue="1.0" onChange={(event) => {this.options.C = Number(event.target.value)}} /> 
                     <label>Tollerance:</label>
                     <input type="number" id="tol" defaultValue="1e-4" disabled={true}/> 
                     <label>Alpha Tollerance:</label>
                     <input type="number" id="atol" defaultValue="1e-7" disabled={true}/> 
                     <label>Max iterations:</label>
-                    <input type="number" id="maxiter" defaultValue="10000" onChange={(event) => {this.config.maxiter = Number(event.target.value)}} />
+                    <input type="number" id="maxiter" defaultValue="10000" onChange={(event) => {this.options.maxiter = Number(event.target.value)}} />
                     <label>Kernel type:</label>
                     <input type="text" id="kernel" defaultValue="linear" disabled={true}/>
                     <label>Number passes:</label>
-                    <input type="number" id="numpas" defaultValue="10" onChange={(event) => {this.config.numpass = Number(event.target.value)}} />
-                    <button onClick= {() => setConf(this.config)}>Confirm options</button>
-                </form>
+                    <input type="number" id="numpas" defaultValue="10" onChange={(event) => {this.options.numpass = Number(event.target.value)}} />
+                    <button onClick= {() => {setConf(this.options)}}>Confirm options</button>
+                </div>
             </div>
         );
     }

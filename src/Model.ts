@@ -32,7 +32,7 @@ export default class Model {
         this.predictor.options = params;
     }
 
-    public parseDatatoChart(array: number[][]){
+    public datatoChart(array: number[][]){
         return this.strategy?.datatoChart(array);
     }
 
@@ -42,7 +42,7 @@ export default class Model {
             this.predictor = this.strategy.train(this.data, this.predictor.options);
     }
 
-    public parseDatatoLine(graph: number[][]){
+    public datatoLine(graph: number[][]){
         return this.strategy?.datatoLine(graph,this.predictor.coefficients);
     }
 
