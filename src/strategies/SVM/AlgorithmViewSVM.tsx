@@ -2,6 +2,11 @@ import React from 'react';
 import Plot from 'react-plotlyjs-ts';
 
 interface Actions {
+    options: {
+        C: number,
+        maxiter: number,
+        numpass: number
+    },
     setConf: (conf: any) => void,
     graphPt: number[][] 
         // 0: pointsXR,
@@ -24,18 +29,12 @@ export default class AlgrithmViewSVM extends React.Component<Actions> {
         numpasses = 10; // increase this for higher precision of the result. (but slower)
     }
     */
-    private options: {
-        C: number,
-        maxiter: number,
-        numpass: number
-    } = {
-        C: 1.0,
-        maxiter: 10000,
-        numpass: 10
-    };
+    state = {
+        opt: 0
+    }
 
     render() {
-        const { setConf, graphPt } = this.props;
+        const { options, setConf, graphPt } = this.props;
         return (
             <div>
 
@@ -72,18 +71,21 @@ export default class AlgrithmViewSVM extends React.Component<Actions> {
                 <h3 id="options" >Choose the algorithm options (if you want)</h3>
                 <div id="SVMopt">
                     <label>C:</label>
-                    <input type="number" id="C" defaultValue="1.0" onChange={(event) => {this.options.C = Number(event.target.value)}} /> 
+                    <input type="number" id="C" value={options.C} onChange={(event) => {options.C = Number(event.target.value);
+                                                                                        this.setState({prec: options.C})}} /> 
                     <label>Tollerance:</label>
                     <input type="number" id="tol" defaultValue="1e-4" disabled={true}/> 
                     <label>Alpha Tollerance:</label>
                     <input type="number" id="atol" defaultValue="1e-7" disabled={true}/> 
                     <label>Max iterations:</label>
-                    <input type="number" id="maxiter" defaultValue="10000" onChange={(event) => {this.options.maxiter = Number(event.target.value)}} />
+                    <input type="number" id="maxiter" value={options.maxiter} onChange={(event) => {options.maxiter = Number(event.target.value);
+                                                                                                    this.setState({prec: options.maxiter})}} />
                     <label>Kernel type:</label>
                     <input type="text" id="kernel" defaultValue="linear" disabled={true}/>
                     <label>Number passes:</label>
-                    <input type="number" id="numpas" defaultValue="10" onChange={(event) => {this.options.numpass = Number(event.target.value)}} />
-                    <button onClick= {() => {setConf(this.options)}}>Confirm options</button>
+                    <input type="number" id="numpas" value={options.numpass} onChange={(event) => {options.numpass = Number(event.target.value)
+                                                                                                    this.setState({prec: options.numpass})}} />
+                    <button onClick= {() => {setConf(options)}}>Confirm options</button>
                 </div>
             </div>
         );

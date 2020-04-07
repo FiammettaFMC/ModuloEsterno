@@ -2,7 +2,11 @@ import React from 'react';
 import Plot from 'react-plotlyjs-ts';
 
 interface Actions {
-    setConf: (conf: any) => void,
+    options: {
+        order: number,
+        precision: number
+    },
+    setConf: (conf: object) => void,
     graphPt: number[][]
         // 0: pointsX,
         // 1: pointsY,
@@ -10,16 +14,13 @@ interface Actions {
 }
 
 export default class AlgorithmViewRL extends React.Component<Actions> {
-    private options: {
-        order: number,
-        precision: number
-    } = {
-        order: 2,
-        precision: 2
-    };
+
+    state = {
+        prec: 2
+    }
 
     render() {
-        const { setConf, graphPt } = this.props;
+        const { options, setConf, graphPt } = this.props;
         return (
             <div>  
                 
@@ -48,14 +49,14 @@ export default class AlgorithmViewRL extends React.Component<Actions> {
                 <h3>Choose the algorithm options (if you want)</h3>
                 <div id="RLopt">
                     <span>Choose the precision: </span>
-                    <select defaultValue={2} onChange={(event) => {this.options.precision = Number(event.target.value)}} >
+                    <select value={options.precision} onChange={(event) => {options.precision = Number(event.target.value); this.setState({prec: options.precision})}} >
                         <option value='1'>1</option>
                         <option value='2'>2</option>
                         <option value='3'>3</option>
                         <option value='4'>4</option>
                         <option value='5'>5</option>
                     </select>
-                    <button onClick= {() => {setConf(this.options)}}>Confirm options</button>
+                    <button onClick= {() => {setConf(options)}}>Confirm options</button>
                 </div>
             </div>
         );

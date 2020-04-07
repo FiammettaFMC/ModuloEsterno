@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import './App.css';
 
 interface Actions {
     selectAlg: (event: any) => void,
     buttonSelectAlg: () => void,
-    buttonInput: (event: any) => void,
+    buttonInputData: (event: ChangeEvent<HTMLInputElement>) => void,
+    buttonInputOpt: (event: ChangeEvent<HTMLInputElement>) => void,
     data: number[][],
     buttonTrain: () => void,
     predictor: string,
     buttonDownload: () => void,
     AlgView?: typeof React.Component,
-    setConf: (config: any) => void,
-    graphPt: {}
+    options: {},
+    setConf: (config: object) => void,
+    graphPt: number[][]
 }
 
 export default class View extends React.Component<Actions> {
@@ -19,6 +21,7 @@ export default class View extends React.Component<Actions> {
     renderAlgView(){
         if(this.props.AlgView)
             return (<this.props.AlgView 
+                        options = {this.props.options}
                         setConf = {this.props.setConf}
                         graphPt = {this.props.graphPt}
                     />);
@@ -27,8 +30,8 @@ export default class View extends React.Component<Actions> {
     }
 
     render(){
-        const { buttonSelectAlg, selectAlg, buttonInput, data, buttonTrain,
-                predictor, buttonDownload} = this.props;
+        const { buttonSelectAlg, selectAlg, buttonInputData, buttonInputOpt,
+                data, buttonTrain, predictor, buttonDownload} = this.props;
         return (
             <div className="App">
             <header className="App-header">
@@ -42,14 +45,24 @@ export default class View extends React.Component<Actions> {
                 </select>
                 <button onClick={buttonSelectAlg}>Confirm definitively</button>
                 
-                <p></p>
+                <br></br>
                 
                 <input
                     type="file"
                     name="data"
                     id="data"
-                    onChange={buttonInput} 
+                    onChange={buttonInputData} 
                 />
+
+                <br></br>
+                
+                <input
+                    type="file"
+                    name="opt"
+                    id="opt"
+                    onChange={buttonInputOpt} 
+                />
+
 
                 <p>{data}</p>
 

@@ -14,3 +14,15 @@ export const algview: { [index: string]: typeof React.Component } = {
     'RL': AlgViewRL,
     'SVM': AlgViewSVM
 };
+
+export const opt: { [index: string]: object } = {
+    'RL': {
+        order: 2,
+        precision: 2
+    },
+    'SVM': {
+        C: 1.0,
+        maxiter: 10000,
+        numpass: 10
+    }
+};

@@ -3,7 +3,8 @@ import './App.css';
 import View from './View';
 import Model from './Model';
 import { observer } from "mobx-react";
-import { algview } from './strategies/Strategies';
+import { algview, opt } from './strategies/Strategies';
+import Predictor from './Predictor';
 
 @observer
 export default class ViewModel extends React.Component {
@@ -12,7 +13,8 @@ export default class ViewModel extends React.Component {
     private algorithm: string = 'RL';
     state = {
         algView: undefined, 
-        graph: []
+        graph: [],
+        options: {}
     }
 
     static validateFile(text: string){
@@ -42,33 +44,51 @@ export default class ViewModel extends React.Component {
         return result;
     }
 
-    loadData(input: any) {
+    loadData(input: FileList | null) {
         const reader = new FileReader(); // declare file reader
-        let data: number[][] = [];
-        reader.readAsText(input.files[0]); // read file
-        reader.onload = (event) => { // when loaded (async?)
-            const goodFormation: boolean = ViewModel.validateFile(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
-            if(goodFormation){
-                data = ViewModel.parseCSVtoData(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
-                this.model.setData(data);
-                this.setState({ graph: this.model.datatoChart(data) });
-            } else{
-                alert('Dati non formattati correttamente!');
-            }
-        };
+        if(input) {
+            reader.readAsText(input[0]); // read file
+            reader.onload = (event) => { // when loaded
+                const goodFormation: boolean = ViewModel.validateFile(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
+                if(goodFormation){
+                    const data: number[][] = ViewModel.parseCSVtoData(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
+                    this.model.setData(data);
+                    this.setState({ graph: this.model.datatoChart(data) });
+                } else{
+                    alert('Data has wrong formattation!');
+                }
+            };
+        }
     }
 
+    loadOpt(input: FileList | null) {
+        if(input) {
+            const reader = new FileReader(); // declare file reader
+            const exstension: string | undefined = input[0].name.split('.').pop();
+            if(exstension === 'json') {
+                reader.readAsText(input[0]); // read file
+                reader.onload = (event) => { // when loaded
+                    const opt = Predictor.fromJSON(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
+                    this.model.setOptions(opt);
+                    this.setState({options: opt});
+                };
+            } else
+                alert('File extension is not json!');
+        }
+    }
+    
     setAlgorithm(alg: string){
         this.algorithm = alg;
     }
-
+    
     selectAlgorithm() {
         this.model.setAlgorithm(this.algorithm);
         this.setState({ algView: algview[this.algorithm] });
+        this.setState({ options: opt[this.algorithm] });
         document.getElementById('alg')?.setAttribute('disabled','true');
     }
-
-    setConfig(conf: any) {
+    
+    setConfig(conf: object) {
         this.model.setOptions(conf);
     }
     
@@ -83,12 +103,14 @@ export default class ViewModel extends React.Component {
                 <View 
                     selectAlg = { (event) => {this.setAlgorithm(event.target.value)} }
                     buttonSelectAlg = {() => {this.selectAlgorithm()} }
-                    buttonInput = {(event) => {this.loadData(event.target)}} 
+                    buttonInputData = {(event) => {this.loadData(event.target.files)}} 
+                    buttonInputOpt = {(event) => {this.loadOpt(event.target.files)}} 
                     data = {this.model.getData()}
                     buttonTrain = {() => this.train()}
-                    predictor = {this.model.getPredictor().function}
+                    predictor = {this.model.getPredictor().predFun}
                     buttonDownload = {() => {this.model.downloadPredictor()}}
                     AlgView = {this.state.algView}
+                    options = {this.state.options}
                     setConf = {this.setConfig.bind(this)}
                     graphPt = {this.state.graph}
                 />

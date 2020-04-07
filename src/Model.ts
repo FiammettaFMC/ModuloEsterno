@@ -1,12 +1,12 @@
 import Strategy from './strategies/Strategy';
 import { observable } from 'mobx';
 import { strategies } from './strategies/Strategies';
-import Predictor from './Predictor';
+import Predictor from './Predictor';    
 
 export default class Model {
     
     @observable private data: number[][] = [];
-    @observable private predictor: Predictor = new Predictor('',[],'',{});
+    @observable private predictor: Predictor = new Predictor();
     private strategy?: Strategy;
    
     public getData() {
@@ -28,8 +28,8 @@ export default class Model {
         this.data = input;
     }
 
-    public setOptions(params: any) {
-        this.predictor.options = params;
+    public setOptions(params: object) {
+        this.predictor.opt = params;
     }
 
     public datatoChart(array: number[][]){
@@ -39,7 +39,7 @@ export default class Model {
     /** Save the predictor in function */
     public train() {
         if(this.strategy)
-            this.predictor = this.strategy.train(this.data, this.predictor.options);
+            this.predictor = this.strategy.train(this.data, this.predictor.opt);
     }
 
     public datatoLine(graph: number[][]){
