@@ -47,6 +47,7 @@ export default class View extends React.Component<Actions> {
                 
                 <br></br>
                 
+                <span>Import data with a csv file: </span>
                 <input
                     type="file"
                     name="data"
@@ -56,6 +57,7 @@ export default class View extends React.Component<Actions> {
 
                 <br></br>
                 
+                <span>Import algorithm options with a json file: </span>
                 <input
                     type="file"
                     name="opt"

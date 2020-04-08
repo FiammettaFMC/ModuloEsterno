@@ -18,11 +18,10 @@ export default class ViewModel extends React.Component {
     }
 
     static validateFile(text: string){
-        const fileReg = /[\d+.\d*,\d+.\d*\n]+/;
-        if(text.match(fileReg))
-            return true;
-        else
-            return false;
+        const fileReg = /^[\d.\d,\d.\d\n]+/; 
+        if(!text.match(fileReg)) {
+            throw new Error('Data has wrong formattation!');
+        }
     }
 
     /** Data parsed from string to Array */
@@ -49,13 +48,13 @@ export default class ViewModel extends React.Component {
         if(input) {
             reader.readAsText(input[0]); // read file
             reader.onload = (event) => { // when loaded
-                const goodFormation: boolean = ViewModel.validateFile(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
-                if(goodFormation){
+                try {
+                    ViewModel.validateFile(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' )
                     const data: number[][] = ViewModel.parseCSVtoData(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
                     this.model.setData(data);
                     this.setState({ graph: this.model.datatoChart(data) });
-                } else{
-                    alert('Data has wrong formattation!');
+                } catch(e){
+                    alert(e);
                 }
             };
         }
@@ -68,9 +67,13 @@ export default class ViewModel extends React.Component {
             if(exstension === 'json') {
                 reader.readAsText(input[0]); // read file
                 reader.onload = (event) => { // when loaded
-                    const opt = Predictor.fromJSON(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
-                    this.model.setOptions(opt);
-                    this.setState({options: opt});
+                    try {
+                        const opt = Predictor.fromJSON(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
+                        this.model.setOptions(opt);
+                        this.setState({options: opt});
+                    } catch (e) {
+                        alert(e);
+                    }
                 };
             } else
                 alert('File extension is not json!');

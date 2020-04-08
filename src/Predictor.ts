@@ -27,9 +27,7 @@ export default class Predictor {
         let predictor: Predictor = JSON.parse(input);
         if(predictor)
             return predictor.opt;
-        else {
-            alert('Error reading file: Predictor bad formatted');
-            return {};
-        }
+        else
+            throw new Error('Predictor bad formatted');
     }
 }
