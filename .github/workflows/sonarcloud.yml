@@ -28,7 +28,7 @@ jobs:
       run: npm test  
       env:
         CI: true
-    - name: fix code coverage paths
+    - name: Fix code-coverage paths
       run: sed -i 's/\/home\/runner\/work\/ModuloEsterno\/ModuloEsterno\//\/github\/workspace\//g' lcov.info
       working-directory: ./coverage
     - name: SonarCloud scan
