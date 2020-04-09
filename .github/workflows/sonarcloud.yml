@@ -28,6 +28,11 @@ jobs:
       run: npm test  
       env:
         CI: true
+    - name: fix code coverage paths
+      run: |
+         sed -i 's/\/home\/runner\/work\/ModuloEsterno\/ModuloEsterno\//\/github\/workspace\//g' lcov.info
+         sed -i 's/\/home\/runner\/work\/ModuloEsterno\/ModuloEsterno\//\/github\/workspace\//g' sonar-cloud-reporter.xml
+      working-directory: ./coverage
     - name: SonarCloud scan
       uses: sonarsource/sonarcloud-github-action@master
       env:
