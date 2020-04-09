@@ -17,7 +17,7 @@ export default class ViewModel extends React.Component {
         options: {}
     }
 
-    static validateFile(text: string){
+    private static validateFile(text: string){
         const fileReg = /^[\d.\d,\d.\d\n]+/; 
         if(!text.match(fileReg)) {
             throw new Error('Data has wrong formattation!');
@@ -25,7 +25,7 @@ export default class ViewModel extends React.Component {
     }
 
     /** Data parsed from string to Array */
-    static parseCSVtoData(text: string) {
+    private static parseCSVtoData(text: string) {
         /* csv delimiters */
         let row = "\n";
         let field = ",";
@@ -43,7 +43,7 @@ export default class ViewModel extends React.Component {
         return result;
     }
 
-    loadData(input: FileList | null) {
+    private loadData(input: FileList | null) {
         const reader = new FileReader(); // declare file reader
         if(input) {
             reader.readAsText(input[0]); // read file
@@ -60,7 +60,7 @@ export default class ViewModel extends React.Component {
         }
     }
 
-    loadOpt(input: FileList | null) {
+    private loadOpt(input: FileList | null) {
         if(input) {
             const reader = new FileReader(); // declare file reader
             const exstension: string | undefined = input[0].name.split('.').pop();
@@ -80,22 +80,22 @@ export default class ViewModel extends React.Component {
         }
     }
     
-    setAlgorithm(alg: string){
+    private setAlgorithm(alg: string){
         this.algorithm = alg;
     }
     
-    selectAlgorithm() {
+    private selectAlgorithm() {
         this.model.setAlgorithm(this.algorithm);
         this.setState({ algView: algview[this.algorithm] });
         this.setState({ options: opt[this.algorithm] });
         document.getElementById('alg')?.setAttribute('disabled','true');
     }
     
-    setConfig(conf: object) {
+    private setConfig(conf: object) {
         this.model.setOptions(conf);
     }
     
-    train() {
+    private train() {
         this.model.train();
         this.setState({ graph: this.model.datatoLine(this.state.graph) });
     }

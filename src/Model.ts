@@ -9,45 +9,45 @@ export default class Model {
     @observable private predictor: Predictor = new Predictor();
     private strategy?: Strategy;
    
-    public getData() {
+    public getData(): number[][] {
         return this.data;
     }
 
-    public getPredictor() {
+    public getPredictor(): Predictor {
         return this.predictor;
     }
 
+    /** Load file and save it in data */
+    public setData(input: number[][]): void {
+        this.data = input;
+    }
+
     /** Set the algorithm to use thanks to the Context*/
-    public setAlgorithm(alg: string){
+    public setAlgorithm(alg: string): void {
         this.predictor.algorithm = alg;
         this.strategy = strategies[alg];
     }
 
-    /** Load file and save it in data */
-    public setData(input: number[][]) {
-        this.data = input;
-    }
-
-    public setOptions(params: object) {
+    public setOptions(params: object): void {
         this.predictor.opt = params;
     }
 
-    public datatoChart(array: number[][]){
+    public datatoChart(array: number[][]): number[][] | undefined {
         return this.strategy?.datatoChart(array);
     }
 
     /** Save the predictor in function */
-    public train() {
+    public train(): void {
         if(this.strategy)
             this.predictor = this.strategy.train(this.data, this.predictor.opt);
     }
 
-    public datatoLine(graph: number[][]){
+    public datatoLine(graph: number[][]): number[][] | undefined {
         return this.strategy?.datatoLine(graph,this.predictor.coefficients);
     }
 
     /** Download predictor as JSON */
-    public downloadPredictor() {
+    public downloadPredictor(): void {
         const FileSaver = require('file-saver'); // import file saver
         const text = this.predictor.toJSON();
         const file = new File([text], 'Training.json', { type: 'text/json;charset=utf-8' });

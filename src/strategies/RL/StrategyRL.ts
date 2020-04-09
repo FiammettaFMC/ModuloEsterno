@@ -4,7 +4,7 @@ import Predictor from "../../Predictor";
 
 export default class StrategyRL implements Strategy{
     
-    static parseArrayToDataPoint(data: number[][]) {
+    static parseArrayToDataPoint(data: number[][]): DataPoint[] {
         let datapoint: DataPoint[] = [];
         data.forEach( (p) => {
             let point: DataPoint = [0,0];
@@ -15,17 +15,16 @@ export default class StrategyRL implements Strategy{
         return datapoint;
     }
     
-    train(dataset: number[][],options: any) {
+    train(dataset: number[][],options: any): Predictor {
         const datapoint = StrategyRL.parseArrayToDataPoint(dataset);
-        return new Predictor( 'Regressione Lineare', 
+        return new Predictor( 'RL', 
                               regression.linear(datapoint, options).equation, 
                               regression.linear(datapoint, options).string,
                               options);
-    
     }
 
     /** Data parsed from Array to point of the graph */
-    datatoChart(data: number[][]){
+    datatoChart(data: number[][]): number[][]{
         let xR: number[] = [];
         let yR: number[] = [];       
         data.forEach((couple) => {
@@ -36,7 +35,7 @@ export default class StrategyRL implements Strategy{
     }
 
     /** Data parsed from Array to point of a straight line of the graph */
-    datatoLine(graph: number[][],coefficients: number[]) {
+    datatoLine(graph: number[][],coefficients: number[]): number[][] {
         let lineY: number[] = [];
         graph[0].forEach((element: number) => {
             lineY.push( ( coefficients[0] * element) + coefficients[1] );

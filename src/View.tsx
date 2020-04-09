@@ -18,7 +18,7 @@ interface Actions {
 
 export default class View extends React.Component<Actions> {
 
-    renderAlgView(){
+    renderAlgorithmView(){
         if(this.props.AlgView)
             return (<this.props.AlgView 
                         options = {this.props.options}
@@ -43,7 +43,7 @@ export default class View extends React.Component<Actions> {
                     <option value="RL">Regressione Lineare (RL)</option>
                     <option value="SVM">Support Vector Machine (SVM)</option>
                 </select>
-                <button onClick={buttonSelectAlg}>Confirm definitively</button>
+                <button onClick={buttonSelectAlg}>Confirm</button>
                 
                 <br></br>
                 
@@ -68,7 +68,7 @@ export default class View extends React.Component<Actions> {
 
                 <p>{data}</p>
 
-                {this.renderAlgView()}
+                {this.renderAlgorithmView()}
 
                 <input
                     type="button"

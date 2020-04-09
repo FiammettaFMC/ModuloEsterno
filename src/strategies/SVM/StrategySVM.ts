@@ -12,7 +12,7 @@ export default class StrategySVM implements Strategy{
          w: a e b della retta in forma implicita
         }    
     */
-    train(dataset: number[][],options: any) {
+    train(dataset: number[][],options: any): Predictor {
         const svm = require('svm');
         const SVM = new svm.SVM();
         let data: number[][] = [];
@@ -22,14 +22,14 @@ export default class StrategySVM implements Strategy{
             labels.push(triple[2]);
         });
         SVM.train(data,labels,options);
-        return new Predictor( 'Support Vector Machine', 
+        return new Predictor( 'SVM', 
                               [SVM.b,SVM.w[0],SVM.w[1]], // [ w0, w1, w2 ] = [ c, a, b ]
                               `y = ${-SVM.w[0]/SVM.w[1]}x + ${-SVM.b/SVM.w[0]}`,
                               options);
     }
 
     // Data parsed from Array to point of the graph 
-    datatoChart(data: number[][]){
+    datatoChart(data: number[][]): number[][]{
         let xR: number[] = [];
         let yR: number[] = [];
         let xW: number[] = [];
@@ -47,7 +47,7 @@ export default class StrategySVM implements Strategy{
     }
 
     // Data parsed from Array to point of a straight line of the graph
-    datatoLine(graph: number[][],coefficients: number[]) {
+    datatoLine(graph: number[][],coefficients: number[]): number[][] {
         let lineY: number[] = [];
         const lineX: number[] = [...graph[0], ...graph[2]];
         lineX.forEach((element) => {
