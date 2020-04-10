@@ -24,10 +24,11 @@ export default class Predictor {
     }
 
     public static fromJSON(input: string) {
-        let predictor: Predictor = JSON.parse(input);
-        if(predictor)
+        try {
+            let predictor: Predictor = JSON.parse(input);
             return predictor.opt;
-        else
+        } catch (e){
             throw new Error('Predictor bad formatted');
+        }
     }
 }

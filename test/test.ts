@@ -27,6 +27,10 @@ test('parsePredictorFromJSONtoObjectAndReturnOpt', ()=> {
     expect(Predictor.fromJSON('{ "opt": 2 }')).toBe(2);
 });
 
+test('parsePredictorFromJSONtoObjectThrowError', ()=> {
+    expect(() => {Predictor.fromJSON('opt": 2 }')}).toThrowError(new Error('Predictor bad formatted'));
+});
+
 test('parseStringtoJSONPredictor', ()=> {
     let pred = new Predictor('RL',[1,2],'y=2x+1',{ord:2,prec:2});
     expect(pred.toJSON()).toBe(
@@ -59,6 +63,24 @@ test('setData', ()=> {
 test('trainOnModel', ()=> {
     model.train();
     expect(model.getPredictor()).toEqual(new Predictor('RL',[1,0],'y = 1x',{"ord": 2, "pre": 2}));
+});
+
+test('dataToChartOnModel', ()=> {
+    expect(model.datatoChart(model.getData())).toEqual([[1,2],[1,2],[]]); //RL
+    let mod = new Model();
+    mod.setAlgorithm('SVM');
+    mod.setData([[0,1,1],[1,0,-1]]);
+    expect(mod.datatoChart(mod.getData())).toEqual([[0],[1],[1],[0],[],[]]); //SVM
+});
+
+test('dataToLineModel', ()=> {
+    expect(model.datatoLine([[1,2],[1,2],[]])).toEqual([[1,2],[1,2],[1,2]]); //RL
+    let mod = new Model();
+    mod.setAlgorithm('SVM');
+    mod.setData([[0,1,1],[1,0,-1]]);
+    mod.setOptions({});
+    mod.train();
+    expect(mod.datatoLine([[0],[1],[1],[0],[],[]])).toEqual([[0],[1],[1],[0],[0,1],[0,1]]); //SVM
 });
 
 //TEST STRATEGYRL
@@ -102,3 +124,6 @@ test('datatoLineOnStrategySVM', ()=> {
     let svm = new StrategySVM();
     expect(svm.datatoLine([[0],[1],[1],[0],[],[]],[0,-1,1])).toEqual([[0],[1],[1],[0],[0,1],[0,1]]);
 });
+
+
+//TEST VIEWMODEL
