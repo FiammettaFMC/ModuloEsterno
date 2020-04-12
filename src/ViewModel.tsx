@@ -21,11 +21,6 @@ export default class ViewModel extends React.Component {
         super(props);
         this.model = new Model();
         this.algorithm = 'RL';
-        this.state = {
-            algView: undefined, 
-            graph: [],
-            options: {}
-        }
     }
 
     static validateFile(text: string): void{
@@ -79,9 +74,9 @@ export default class ViewModel extends React.Component {
                 reader.readAsText(input); // read file
                 reader.onload = (event) => { // when loaded
                     try {
-                        const opt = Predictor.fromJSON(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
-                        this.model.setOptions(opt);
-                        this.setState({options: opt});
+                        const config = Predictor.fromJSON(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
+                        this.model.setOptions(config);
+                        this.setState({options: config});
                     } catch (e) {
                         alert(e);
                     }
@@ -113,7 +108,6 @@ export default class ViewModel extends React.Component {
     
     render() {
         return (
-            <div>
                 <View 
                     selectAlg = { (event) => {this.setAlgorithm(event.target.value)} }
                     buttonSelectAlg = {() => {this.selectAlgorithm()} }
@@ -128,7 +122,6 @@ export default class ViewModel extends React.Component {
                     setConf = {this.setConfig.bind(this)}
                     graphPt = {this.state.graph}
                 />
-            </div>
         );
     }
 }

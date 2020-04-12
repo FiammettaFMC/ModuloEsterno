@@ -13,6 +13,8 @@ let vm: ViewModel;
 beforeAll(() => {
     model = new Model();
     vm = new ViewModel({});
+    window.alert = jest.fn(()=>{});
+    jest.mock('file-saver', ()=>({saveAs: jest.fn()}));
 });
 
 
@@ -64,11 +66,15 @@ test('setData', ()=> {
 });
 
 test('trainOnModel', ()=> {
+    let mod = new Model();
+    mod.train();
     model.train();
     expect(model.getPredictor()).toEqual(new Predictor('RL',[1,0],'y = 1x',{"ord": 2, "pre": 2}));
 });
 
 test('dataToChartOnModel', ()=> {
+    let mod0 = new Model();
+    mod0.datatoChart([[1,2],[3,4]]);
     expect(model.datatoChart(model.getData())).toEqual([[1,2],[1,2],[]]); //RL
     let mod = new Model();
     mod.setAlgorithm('SVM');
@@ -77,6 +83,8 @@ test('dataToChartOnModel', ()=> {
 });
 
 test('dataToLineModel', ()=> {
+    let mod0 = new Model();
+    mod0.datatoLine([[1,2],[3,4]]);
     expect(model.datatoLine([[1,2],[1,2],[]])).toEqual([[1,2],[1,2],[1,2]]); //RL
     let mod = new Model();
     mod.setAlgorithm('SVM');
@@ -84,6 +92,10 @@ test('dataToLineModel', ()=> {
     mod.setOptions({});
     mod.train();
     expect(mod.datatoLine([[0],[1],[1],[0],[],[]])).toEqual([[0],[1],[1],[0],[0,1],[0,1]]); //SVM
+});
+
+test('downloadPredictor',()=>{
+    model.downloadPredictor();
 });
 
 //TEST STRATEGYRL
@@ -139,12 +151,19 @@ test('validateFile',() => {
 test('parseCSVtoData',() => {
     expect(ViewModel.parseCSVtoData('1,2\n3,4')).toEqual([[1,2],[3,4]]);
 });
+
 test('loadDataOnViewMOdel',()=>{
     const blob: any = new Blob(['1,2\n3,4'], { type: "text/html" });
     blob.lastModifiedDate = new Date();
     blob.name = "filename";
     const file = blob as File;
+    const blob1: any = new Blob(['asas'], { type: "text/html" });
+    blob1.lastModifiedDate = new Date();
+    blob1.name = "filename";
+    const file1 = blob1 as File;
     vm.loadData(file);
+    vm.loadData(null);
+    vm.loadData(file1);
 });
 
 test('setAlgorithm',() => {
@@ -159,17 +178,18 @@ test('setConfig',() => {
     vm.setConfig({ord: 2, prec: 2});    
 });
 
-test('loadOptOnViewMOdel',()=>{
-    const jsdomAlert = window.alert;  // remember the jsdom alert
-    window.alert = () => {};  // provide an empty implementation for window.alert
+test('loadOptOnViewMOdel',()=>{ 
     const blob: any = new Blob(['{ "opt": 2 }'], { type: "text/html" });
     blob.lastModifiedDate = new Date();
-    blob.name = "filename";
+    blob.name = "training.json";
     const file = blob as File;
     vm.loadOpt(file);
-    window.alert = jsdomAlert;  // restore the jsdom alert
+    vm.loadOpt(null);
 });
 
+test('Render',() => {
+    vm.render();
+});
 
 // test('trainOnViewModel',() => {
 //     const blob: any = new Blob(['1,2\n3,4'], { type: "text/html" });
