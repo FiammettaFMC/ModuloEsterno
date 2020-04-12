@@ -9,15 +9,26 @@ import Predictor from './Predictor';
 @observer
 export default class ViewModel extends React.Component {
     
-    private model: Model = new Model();
-    private algorithm: string = 'RL';
+    private model: Model;
+    private algorithm: string;
     state = {
         algView: undefined, 
         graph: [],
         options: {}
     }
 
-    private static validateFile(text: string): void{
+    constructor(props: any) {
+        super(props);
+        this.model = new Model();
+        this.algorithm = 'RL';
+        this.state = {
+            algView: undefined, 
+            graph: [],
+            options: {}
+        }
+    }
+
+    static validateFile(text: string): void{
         const fileReg = /^[\d.\d,\d.\d\n]+/; 
         if(!text.match(fileReg)) {
             throw new Error('Data has wrong formattation!');
@@ -25,7 +36,7 @@ export default class ViewModel extends React.Component {
     }
 
     /** Data parsed from string to Array */
-    private static parseCSVtoData(text: string): number[][] {
+    static parseCSVtoData(text: string): number[][] {
         /* csv delimiters */
         let row = "\n";
         let field = ",";
@@ -43,10 +54,10 @@ export default class ViewModel extends React.Component {
         return result;
     }
 
-    private loadData(input: FileList | null): void {
+    loadData(input: File | null): void {
         const reader = new FileReader(); // declare file reader
         if(input) {
-            reader.readAsText(input[0]); // read file
+            reader.readAsText(input); // read file
             reader.onload = (event) => { // when loaded
                 try {
                     ViewModel.validateFile(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' )
@@ -60,12 +71,12 @@ export default class ViewModel extends React.Component {
         }
     }
 
-    private loadOpt(input: FileList | null): void {
+    loadOpt(input: File | null): void {
         if(input) {
             const reader = new FileReader(); // declare file reader
-            const exstension: string | undefined = input[0].name.split('.').pop();
+            const exstension: string | undefined = input.name.split('.').pop();
             if(exstension === 'json') {
-                reader.readAsText(input[0]); // read file
+                reader.readAsText(input); // read file
                 reader.onload = (event) => { // when loaded
                     try {
                         const opt = Predictor.fromJSON(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
@@ -80,22 +91,22 @@ export default class ViewModel extends React.Component {
         }
     }
     
-    private setAlgorithm(alg: string): void{
+    setAlgorithm(alg: string): void{
         this.algorithm = alg;
     }
     
-    private selectAlgorithm(): void {
+    selectAlgorithm(): void {
         this.model.setAlgorithm(this.algorithm);
         this.setState({ algView: algview[this.algorithm] });
         this.setState({ options: opt[this.algorithm] });
         document.getElementById('alg')?.setAttribute('disabled','true');
     }
     
-    private setConfig(conf: object): void {
+    setConfig(conf: object): void {
         this.model.setOptions(conf);
     }
     
-    private train(): void {
+    train(): void {
         this.model.train();
         this.setState({ graph: this.model.datatoLine(this.state.graph) });
     }
@@ -106,8 +117,8 @@ export default class ViewModel extends React.Component {
                 <View 
                     selectAlg = { (event) => {this.setAlgorithm(event.target.value)} }
                     buttonSelectAlg = {() => {this.selectAlgorithm()} }
-                    buttonInputData = {(event) => {this.loadData(event.target.files)}} 
-                    buttonInputOpt = {(event) => {this.loadOpt(event.target.files)}} 
+                    buttonInputData = {(e) => {this.loadData(e.target ? (e.target.files ? e.target.files[0]: null) : null )}} 
+                    buttonInputOpt = {(e) => {this.loadOpt(e.target ? (e.target.files ? e.target.files[0]: null) : null )}} 
                     data = {this.model.getData()}
                     buttonTrain = {() => this.train()}
                     predictor = {this.model.getPredictor().predFun}

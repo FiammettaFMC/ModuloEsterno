@@ -4,12 +4,15 @@ import Model from '../src/Model';
 import { DataPoint } from 'regression';
 import StrategyRL from '../src/strategies/RL/StrategyRL';
 import StrategySVM from '../src/strategies/SVM/StrategySVM';
+import ViewModel from '../src/ViewModel';
 
 jest.mock('react-plotlyjs-ts',()=>{});
 
 let model: Model;
+let vm: ViewModel; 
 beforeAll(() => {
     model = new Model();
+    vm = new ViewModel({});
 });
 
 
@@ -127,3 +130,53 @@ test('datatoLineOnStrategySVM', ()=> {
 
 
 //TEST VIEWMODEL
+
+test('validateFile',() => {
+    ViewModel.validateFile('1,2\n3,4');
+    expect(() => {ViewModel.validateFile('dass')}).toThrowError(new Error('Data has wrong formattation!'));
+});
+
+test('parseCSVtoData',() => {
+    expect(ViewModel.parseCSVtoData('1,2\n3,4')).toEqual([[1,2],[3,4]]);
+});
+test('loadDataOnViewMOdel',()=>{
+    const blob: any = new Blob(['1,2\n3,4'], { type: "text/html" });
+    blob.lastModifiedDate = new Date();
+    blob.name = "filename";
+    const file = blob as File;
+    vm.loadData(file);
+});
+
+test('setAlgorithm',() => {
+    vm.setAlgorithm('RL');    
+});
+
+test('selecttAlgorithm',() => {
+    vm.selectAlgorithm();    
+});
+
+test('setConfig',() => {
+    vm.setConfig({ord: 2, prec: 2});    
+});
+
+test('loadOptOnViewMOdel',()=>{
+    const jsdomAlert = window.alert;  // remember the jsdom alert
+    window.alert = () => {};  // provide an empty implementation for window.alert
+    const blob: any = new Blob(['{ "opt": 2 }'], { type: "text/html" });
+    blob.lastModifiedDate = new Date();
+    blob.name = "filename";
+    const file = blob as File;
+    vm.loadOpt(file);
+    window.alert = jsdomAlert;  // restore the jsdom alert
+});
+
+
+// test('trainOnViewModel',() => {
+//     const blob: any = new Blob(['1,2\n3,4'], { type: "text/html" });
+//     blob.lastModifiedDate = new Date();
+//     blob.name = "filename";
+//     const file = blob as File;
+//     vm.selectAlgorithm();
+//     vm.loadData(file);
+//     vm.train();
+// });
