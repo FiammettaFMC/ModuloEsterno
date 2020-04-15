@@ -24,7 +24,7 @@ export default class ViewModel extends React.Component {
     }
 
     static validateFile(text: string): void{
-        const fileReg = /^[\d.\d,\d.\d\n]+/; 
+        const fileReg = /^[-?\d.\d?,-?\d.\d?\n]+/;
         if(!text.match(fileReg)) {
             throw new Error('Data has wrong formattation!');
         }
@@ -43,7 +43,7 @@ export default class ViewModel extends React.Component {
             .forEach((element) => {
                 let sPoint = element.split(field);
                 let point: number[] = [];
-                sPoint.forEach((e) => { point.push(parseInt(e)); })
+                sPoint.forEach((e) => { point.push(parseFloat(e)); })
                 result.push(point);
             });
         return result;

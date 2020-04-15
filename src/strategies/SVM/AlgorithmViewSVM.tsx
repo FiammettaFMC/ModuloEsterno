@@ -45,7 +45,7 @@ export default class AlgrithmViewSVM extends React.Component<Actions> {
                             y: graphPt[1],
                             type: 'scatter',
                             mode: 'markers',
-                            marker: {color: `green` },
+                            marker: {color: 'green', size: 10 },
                             name: 'Punti',
                         },
                         {
@@ -53,7 +53,7 @@ export default class AlgrithmViewSVM extends React.Component<Actions> {
                             y: graphPt[3],
                             type: 'scatter',
                             mode: 'markers',
-                            marker: {color: `red` },
+                            marker: {color: 'red', size: 10 },
                             name: 'Punti',
                         },
                         {   
@@ -61,7 +61,7 @@ export default class AlgrithmViewSVM extends React.Component<Actions> {
                             y: graphPt[5],
                             type: 'lines',
                             mode: 'lines',
-                            line: {color: 'blue'},
+                            line: {color: 'blue', width: 3},
                             name: 'Retta',
                         }
                     ]}
