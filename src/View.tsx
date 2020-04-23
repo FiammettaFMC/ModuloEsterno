@@ -6,7 +6,6 @@ interface Actions {
     buttonSelectAlg: () => void,
     buttonInputData: (event: ChangeEvent<HTMLInputElement>) => void,
     buttonInputOpt: (event: ChangeEvent<HTMLInputElement>) => void,
-    data: number[][],
     buttonTrain: () => void,
     predictor: string,
     buttonDownload: () => void,
@@ -31,7 +30,7 @@ export default class View extends React.Component<Actions> {
 
     render(){
         const { buttonSelectAlg, selectAlg, buttonInputData, buttonInputOpt,
-                data, buttonTrain, predictor, buttonDownload} = this.props;
+                buttonTrain, predictor, buttonDownload} = this.props;
         return (
             <div className="App">
             <header className="App-header">
@@ -47,49 +46,57 @@ export default class View extends React.Component<Actions> {
                 
                 <br></br>
                 
-                <span>Import data with a csv file: </span>
-                <input
-                    type="file"
-                    name="data"
-                    id="data"
-                    onChange={buttonInputData} 
-                />
+                <div id='import' style={{display: 'none'}}>
 
-                <br></br>
-                
-                <span>Import algorithm options with a json file: </span>
-                <input
-                    type="file"
-                    name="opt"
-                    id="opt"
-                    onChange={buttonInputOpt} 
-                />
+                    <span>Import data with a csv file: </span>
+                    <input
+                        type="file"
+                        name="data"
+                        id="data"
+                        onChange={buttonInputData}
+                        accept=".csv,.txt"
+                    />
 
+                    <br></br>
+                    
+                    <span>Import algorithm options with a json file: </span>
+                    <input
+                        type="file"
+                        name="opt"
+                        id="opt"
+                        onChange={buttonInputOpt}
+                        accept=".json"
+                    />
 
-                <p>{data}</p>
+                </div>
 
                 {this.renderAlgorithmView()}
 
                 <input
+                    id='train'
                     type="button"
                     value="Train 🚂"
                     onClick={buttonTrain}
+                    style={{display: 'none'}}
                 />
 
                 <p></p>
                 <input
+                    id='reset'
                     type="button"
                     value="Reset"
                     onClick={() => {window.location.reload(false)}}
+                    style={{display: 'none'}}
                 />
 
-                <p>Function: {predictor}</p>
+                <p className='function'  style={{display: 'none'}}>Function: {predictor}</p>
 
                 <input
                     type="button"
-                    value="Download JSON"
+                    value="Download Predictor"
                     id = "download"
                     onClick={buttonDownload}
+                    style={{display: 'none'}}
                 />
             </main>
         </div>

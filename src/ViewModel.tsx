@@ -59,6 +59,7 @@ export default class ViewModel extends React.Component {
                     const data: number[][] = ViewModel.parseCSVtoData(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
                     this.model.setData(data);
                     this.setState({ graph: this.model.datatoChart(data) });
+                    document.getElementById('train')?.setAttribute('style','display: block');
                 } catch(e){
                     alert(e);
                 }
@@ -94,7 +95,10 @@ export default class ViewModel extends React.Component {
         this.model.setAlgorithm(this.algorithm);
         this.setState({ algView: algview[this.algorithm] });
         this.setState({ options: opt[this.algorithm] });
-        document.getElementById('alg')?.setAttribute('disabled','true');
+        this.setConfig(opt[this.algorithm]);
+        let a = document.getElementById('alg');
+        if(a) a.setAttribute('disabled','true');
+        document.getElementById('import')?.setAttribute('style','display: block');
     }
     
     setConfig(conf: object): void {
@@ -102,8 +106,13 @@ export default class ViewModel extends React.Component {
     }
     
     train(): void {
-        this.model.train();
-        this.setState({ graph: this.model.datatoLine(this.state.graph) });
+        if(this.model.getData()){
+            this.model.train();
+            this.setState({ graph: this.model.datatoLine(this.state.graph) });
+            document.getElementsByClassName('function')[0]?.setAttribute('style','display: block');
+            document.getElementById('reset')?.setAttribute('style','display: block');
+            document.getElementById('download')?.setAttribute('style','display: block');
+        }
     }
     
     render() {
@@ -113,7 +122,6 @@ export default class ViewModel extends React.Component {
                     buttonSelectAlg = {() => {this.selectAlgorithm()} }
                     buttonInputData = {(e) => {this.loadData(e.target ? (e.target.files ? e.target.files[0]: null) : null )}} 
                     buttonInputOpt = {(e) => {this.loadOpt(e.target ? (e.target.files ? e.target.files[0]: null) : null )}} 
-                    data = {this.model.getData()}
                     buttonTrain = {() => this.train()}
                     predictor = {this.model.getPredictor().predFun}
                     buttonDownload = {() => {this.model.downloadPredictor()}}

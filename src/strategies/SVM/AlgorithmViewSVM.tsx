@@ -45,7 +45,7 @@ export default class AlgrithmViewSVM extends React.Component<Actions> {
                             y: graphPt[1],
                             type: 'scatter',
                             mode: 'markers',
-                            marker: {color: 'green', size: 10 },
+                            marker: {color: 'green', size: 7 },
                             name: 'Punti',
                         },
                         {
@@ -53,7 +53,7 @@ export default class AlgrithmViewSVM extends React.Component<Actions> {
                             y: graphPt[3],
                             type: 'scatter',
                             mode: 'markers',
-                            marker: {color: 'red', size: 10 },
+                            marker: {color: 'red', size: 7 },
                             name: 'Punti',
                         },
                         {   
@@ -61,7 +61,7 @@ export default class AlgrithmViewSVM extends React.Component<Actions> {
                             y: graphPt[5],
                             type: 'lines',
                             mode: 'lines',
-                            line: {color: 'blue', width: 3},
+                            line: {color: 'blue', width: 2},
                             name: 'Retta',
                         }
                     ]}
@@ -69,22 +69,20 @@ export default class AlgrithmViewSVM extends React.Component<Actions> {
                 />
                
                 <h3 id="options" >Choose the algorithm options (if you want)</h3>
+                <label>Kernel type: linear</label>
+                <br></br>
+                <label>Alpha Tollerance: 1e-7</label>
+                <br></br>
+                <label>Tollerance: 1e-4</label>
+                <br></br>
                 <div id="SVMopt">
                     <label>C:</label>
-                    <input type="number" id="C" value={options.C} onChange={(event) => {options.C = Number(event.target.value);
-                                                                                        this.setState({prec: options.C})}} /> 
-                    <label>Tollerance:</label>
-                    <input type="number" id="tol" defaultValue="1e-4" disabled={true}/> 
-                    <label>Alpha Tollerance:</label>
-                    <input type="number" id="atol" defaultValue="1e-7" disabled={true}/> 
+                    <input type="number" id="C" value={options.C} onChange={(event) => {options.C = Number(event.target.value); this.setState({prec: options.C})}} /> 
                     <label>Max iterations:</label>
-                    <input type="number" id="maxiter" value={options.maxiter} onChange={(event) => {options.maxiter = Number(event.target.value);
-                                                                                                    this.setState({prec: options.maxiter})}} />
-                    <label>Kernel type:</label>
-                    <input type="text" id="kernel" defaultValue="linear" disabled={true}/>
+                    <input type="number" id="maxiter" value={options.maxiter} onChange={(event) => {options.maxiter = Number(event.target.value); this.setState({prec: options.maxiter})}} />
                     <label>Number passes:</label>
-                    <input type="number" id="numpas" value={options.numpass} onChange={(event) => {options.numpass = Number(event.target.value)
-                                                                                                    this.setState({prec: options.numpass})}} />
+                    <input type="number" id="numpas" value={options.numpass} onChange={(event) => {options.numpass = Number(event.target.value); this.setState({prec: options.numpass})}} />
+                    <br></br>
                     <button onClick= {() => {setConf(options)}}>Confirm options</button>
                 </div>
             </div>

@@ -31,7 +31,7 @@ export default class AlgorithmViewRL extends React.Component<Actions> {
                             y: graphPt[1],
                             type: 'scatter',
                             mode: 'markers',
-                            marker: {color: 'orange', size: 10 },
+                            marker: {color: 'orange', size: 7 },
                             name: 'Punti',
                         },
                         {   
@@ -39,7 +39,7 @@ export default class AlgorithmViewRL extends React.Component<Actions> {
                             y: graphPt[2],
                             type: 'lines',
                             mode: 'lines',
-                            line: {color: 'blue', width: 3},
+                            line: {color: 'blue', width: 2},
                             name: 'Retta',
                         }
                     ]}
