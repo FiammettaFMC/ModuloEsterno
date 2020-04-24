@@ -1,46 +1,16 @@
 import Strategy from "./../Strategy";
-import regression, { DataPoint } from 'regression';
+import regression from 'regression';
 import Predictor from "../../Predictor";
+import DataRL from "./DataRL";
+import OptionRL from "./OptionRL";
 
 export default class StrategyRL implements Strategy{
     
-    static parseArrayToDataPoint(data: number[][]): DataPoint[] {
-        let datapoint: DataPoint[] = [];
-        data.forEach( (p) => {
-            let point: DataPoint = [0,0];
-            point[0] = p[0];
-            point[1] = p[1];
-            datapoint.push(point);
-        });
-        return datapoint;
-    }
-    
-    train(dataset: number[][],options: any): Predictor {
-        const datapoint = StrategyRL.parseArrayToDataPoint(dataset);
+    train(dataset: DataRL,options: OptionRL): Predictor {
         return new Predictor( 'RL', 
-                              regression.linear(datapoint, options).equation, 
-                              regression.linear(datapoint, options).string,
+                              regression.linear(dataset.getPoints(), {order: options.getOrder(), precision: options.getPrecision()}).equation, 
+                              regression.linear(dataset.getPoints(), {order: options.getOrder(), precision: options.getPrecision()}).string,
                               options);
-    }
-
-    /** Data parsed from Array to point of the graph */
-    datatoChart(data: number[][]): number[][]{
-        let xR: number[] = [];
-        let yR: number[] = [];       
-        data.forEach((couple) => {
-            xR.push(couple[0]);
-            yR.push(couple[1]);
-        });
-        return [xR, yR, []];
-    }
-
-    /** Data parsed from Array to point of a straight line of the graph */
-    datatoLine(graph: number[][],coefficients: number[]): number[][] {
-        let lineY: number[] = [];
-        graph[0].forEach((element: number) => {
-            lineY.push( ( coefficients[0] * element) + coefficients[1] );
-        });
-        return [graph[0], graph[1], lineY];
     }
     
 }

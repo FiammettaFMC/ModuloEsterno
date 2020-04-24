@@ -1,15 +1,50 @@
+import Option from "./strategies/Option";
+import { opt } from "./strategies/Strategies";
 
 export default class Predictor {
-    algorithm: string;
-    coefficients: number[];
-    predFun: string;
-    opt: object;
+    private algorithm: string;
+    private coefficients: number[];
+    private predFun: string;
+    private opt: Option;
 
     constructor(alg?: string, coef?: number[], func?: string, opt?: any) {
         this.algorithm = alg ? alg : '';
         this.coefficients = coef ? coef: [];
         this.predFun = func ? func : '';
         this.opt = opt ? opt : {};
+    }
+
+    getAlg(): string {
+        return this.algorithm;
+    }
+
+    getCoef(): number[] {
+        return this.coefficients;
+    }
+    
+    getFun(): string {
+        return this.predFun;
+    }
+    
+    getOpt(){
+        return this.opt;
+    }
+
+    setAlg(alg: string) {
+        this.algorithm = alg;
+        this.opt = opt[alg];
+    }
+
+    setCoef(coef: number[]) {
+        this.coefficients = coef;
+    }
+    
+    setFun(fun: string) {
+        this.predFun = fun;
+    }
+    
+    setOpt(conf: string){
+        this.opt.setValueFile(conf);
     }
 
     toJSON(): string {
@@ -21,14 +56,5 @@ export default class Predictor {
     "opt": ${JSON.stringify(this.opt)}
 }`; // string output
         return textFile;
-    }
-
-    public static fromJSON(input: string) {
-        try {
-            let predictor: Predictor = JSON.parse(input);
-            return predictor.opt;
-        } catch (e){
-            throw new Error('Predictor bad formatted');
-        }
     }
 }

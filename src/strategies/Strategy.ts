@@ -1,7 +1,7 @@
 import Predictor from "../Predictor";
+import Data from "./Data";
+import Option from "./Option";
 
 export default interface Strategy {
-    train(dataset: number[][],options: any): Predictor;
-    datatoChart(dataset: number[][]): number[][];
-    datatoLine(graph: number[][],coefficients: number[]): number[][];
+    train(dataset: Data,options: Option): Predictor;
 }

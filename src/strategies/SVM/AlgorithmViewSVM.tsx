@@ -1,20 +1,11 @@
 import React from 'react';
 import Plot from 'react-plotlyjs-ts';
+import DataSVM from './DataSVM';
+import OptionSVM from './OptionSVM';
 
 interface Actions {
-    options: {
-        C: number,
-        maxiter: number,
-        numpass: number
-    },
-    setConf: (conf: any) => void,
-    graphPt: number[][] 
-        // 0: pointsXR,
-        // 1: pointsYR,
-        // 2: pointsXW,
-        // 3: pointsYW,
-        // 4: pointsLineX,
-        // 5: pointsLineY
+    options: OptionSVM,
+    graphPt: DataSVM
 }
 
 export default class AlgrithmViewSVM extends React.Component<Actions> {
@@ -34,31 +25,31 @@ export default class AlgrithmViewSVM extends React.Component<Actions> {
     }
 
     render() {
-        const { options, setConf, graphPt } = this.props;
+        const { options, graphPt } = this.props;
         return (
             <div>
 
                 <Plot
                     data={[
                         {
-                            x: graphPt[0],
-                            y: graphPt[1],
+                            x: graphPt.getXRPoints(),
+                            y: graphPt.getYRPoints(),
                             type: 'scatter',
                             mode: 'markers',
                             marker: {color: 'green', size: 7 },
                             name: 'Punti',
                         },
                         {
-                            x: graphPt[2],
-                            y: graphPt[3],
+                            x: graphPt.getXWPoints(),
+                            y: graphPt.getYWPoints(),
                             type: 'scatter',
                             mode: 'markers',
                             marker: {color: 'red', size: 7 },
                             name: 'Punti',
                         },
                         {   
-                            x: graphPt[4],
-                            y: graphPt[5],
+                            x: graphPt.getXLine(),
+                            y: graphPt.getYLine(),
                             type: 'lines',
                             mode: 'lines',
                             line: {color: 'blue', width: 2},
@@ -77,13 +68,11 @@ export default class AlgrithmViewSVM extends React.Component<Actions> {
                 <br></br>
                 <div id="SVMopt">
                     <label>C:</label>
-                    <input type="number" id="C" value={options.C} onChange={(event) => {options.C = Number(event.target.value); this.setState({prec: options.C})}} /> 
+                    <input type="number" id="C" value={options.getC()} onChange={(event) => {options.setC(Number(event.target.value)); this.setState({opt: options.getC()})}} /> 
                     <label>Max iterations:</label>
-                    <input type="number" id="maxiter" value={options.maxiter} onChange={(event) => {options.maxiter = Number(event.target.value); this.setState({prec: options.maxiter})}} />
+                    <input type="number" id="maxiter" value={options.getMaxIter()} onChange={(event) => {options.setMaxIter(Number(event.target.value)); this.setState({opt: options.getMaxIter()})}} />
                     <label>Number passes:</label>
-                    <input type="number" id="numpas" value={options.numpass} onChange={(event) => {options.numpass = Number(event.target.value); this.setState({prec: options.numpass})}} />
-                    <br></br>
-                    <button onClick= {() => {setConf(options)}}>Confirm options</button>
+                    <input type="number" id="numpas" value={options.getNumPass()} onChange={(event) => {options.setNumPass(Number(event.target.value)); this.setState({opt: options.getNumPass()})}} />
                 </div>
             </div>
         );

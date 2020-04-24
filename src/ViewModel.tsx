@@ -3,8 +3,7 @@ import './App.css';
 import View from './View';
 import Model from './Model';
 import { observer } from "mobx-react";
-import { algview, opt } from './strategies/Strategies';
-import Predictor from './Predictor';
+import { algview, opt, data } from './strategies/Strategies';
 
 @observer
 export default class ViewModel extends React.Component {
@@ -12,8 +11,8 @@ export default class ViewModel extends React.Component {
     private model: Model;
     private algorithm: string;
     state = {
-        algView: undefined, 
-        graph: [],
+        algView: undefined,
+        graphPt: undefined,
         options: {}
     }
 
@@ -58,8 +57,9 @@ export default class ViewModel extends React.Component {
                     ViewModel.validateFile(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' )
                     const data: number[][] = ViewModel.parseCSVtoData(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
                     this.model.setData(data);
-                    this.setState({ graph: this.model.datatoChart(data) });
-                    document.getElementById('train')?.setAttribute('style','display: block');
+                    this.setState({graphPt: this.model.getData()});
+                    let t = document.getElementById('train');
+                    if(t) t.setAttribute('style','display: block');
                 } catch(e){
                     alert(e);
                 }
@@ -75,9 +75,9 @@ export default class ViewModel extends React.Component {
                 reader.readAsText(input); // read file
                 reader.onload = (event) => { // when loaded
                     try {
-                        const config = Predictor.fromJSON(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
-                        this.model.setOptions(config);
-                        this.setState({options: config});
+                        const config: string = (event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
+                        this.model.setPredictoOptions(config);
+                        this.setState({options: this.model.getPredictor().getOpt()});
                     } catch (e) {
                         alert(e);
                     }
@@ -95,23 +95,23 @@ export default class ViewModel extends React.Component {
         this.model.setAlgorithm(this.algorithm);
         this.setState({ algView: algview[this.algorithm] });
         this.setState({ options: opt[this.algorithm] });
-        this.setConfig(opt[this.algorithm]);
+        this.setState({ graphPt: data[this.algorithm] });
         let a = document.getElementById('alg');
         if(a) a.setAttribute('disabled','true');
-        document.getElementById('import')?.setAttribute('style','display: block');
-    }
-    
-    setConfig(conf: object): void {
-        this.model.setOptions(conf);
+        let i = document.getElementById('import');
+        if(i) i.setAttribute('style','display: block');
     }
     
     train(): void {
         if(this.model.getData()){
             this.model.train();
-            this.setState({ graph: this.model.datatoLine(this.state.graph) });
-            document.getElementsByClassName('function')[0]?.setAttribute('style','display: block');
-            document.getElementById('reset')?.setAttribute('style','display: block');
-            document.getElementById('download')?.setAttribute('style','display: block');
+            this.setState({graphPt: this.model.getData()});
+            let f = document.getElementsByClassName('function')[0];
+            if(f) f.setAttribute('style','display: block');
+            let r = document.getElementById('reset');
+            if(r) r.setAttribute('style','display: block');
+            let d = document.getElementById('download');
+            if(d) d.setAttribute('style','display: block');
         }
     }
     
@@ -123,12 +123,11 @@ export default class ViewModel extends React.Component {
                     buttonInputData = {(e) => {this.loadData(e.target ? (e.target.files ? e.target.files[0]: null) : null )}} 
                     buttonInputOpt = {(e) => {this.loadOpt(e.target ? (e.target.files ? e.target.files[0]: null) : null )}} 
                     buttonTrain = {() => this.train()}
-                    predictor = {this.model.getPredictor().predFun}
+                    predictor = {this.model.getPredictor().getFun()}
                     buttonDownload = {() => {this.model.downloadPredictor()}}
                     AlgView = {this.state.algView}
                     options = {this.state.options}
-                    setConf = {this.setConfig.bind(this)}
-                    graphPt = {this.state.graph}
+                    graphPt = {this.state.graphPt}
                 />
         );
     }

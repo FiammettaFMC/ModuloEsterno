@@ -22,10 +22,10 @@ beforeAll(() => {
 
 test('construnctor', ()=> {
     let pred = new Predictor('RL',[1,2],'y = 2x +4',{ord: 2, prec: 3});
-    expect(pred.algorithm).toBe('RL');    
-    expect(pred.coefficients).toEqual([1,2]);    
-    expect(pred.predFun).toBe('y = 2x +4');    
-    expect(pred.opt).toEqual({ord: 2, prec: 3});    
+    expect(pred.getAlg()).toBe('RL');    
+    expect(pred.getCoef()).toEqual([1,2]);    
+    expect(pred.getFun()).toBe('y = 2x +4');    
+    expect(pred.getOpt()).toEqual({ord: 2, prec: 3});    
 });
 
 test('parsePredictorFromJSONtoObjectAndReturnOpt', ()=> {
@@ -52,12 +52,12 @@ test('parseStringtoJSONPredictor', ()=> {
 
 test('setPredictorAlgorithm', ()=> {
     model.setAlgorithm('RL');
-    expect(model.getPredictor().algorithm).toBe('RL');
+    expect(model.getPredictor().getAlg()).toBe('RL');
 });
 
 test('setAlgorithmOptions', ()=> {
     model.setOptions({"ord": 2, "pre": 2});
-    expect(model.getPredictor().opt).toEqual({"ord": 2, "pre": 2});
+    expect(model.getPredictor().getOpt()).toEqual({"ord": 2, "pre": 2});
 });
 
 test('setData', ()=> {
@@ -119,7 +119,7 @@ test('datatoChartOnStrategyRL', ()=> {
 
 test('datatoLineOnStrategyRL', ()=> {
     let rl = new StrategyRL();
-    expect(rl.datatoLine([[1,2],[1,2],[]],model.getPredictor().coefficients)).toEqual([[1,2],[1,2],[1,2]]);
+    expect(rl.datatoLine([[1,2],[1,2],[]],model.getPredictor().getCoef())).toEqual([[1,2],[1,2],[1,2]]);
 });
 
 //TEST STRATEGYSVM

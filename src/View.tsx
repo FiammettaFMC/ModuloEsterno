@@ -10,9 +10,8 @@ interface Actions {
     predictor: string,
     buttonDownload: () => void,
     AlgView?: typeof React.Component,
-    options: {},
-    setConf: (config: object) => void,
-    graphPt: number[][]
+    options: any,
+    graphPt: any
 }
 
 export default class View extends React.Component<Actions> {
@@ -21,7 +20,6 @@ export default class View extends React.Component<Actions> {
         if(this.props.AlgView)
             return (<this.props.AlgView 
                         options = {this.props.options}
-                        setConf = {this.props.setConf}
                         graphPt = {this.props.graphPt}
                     />);
         else
