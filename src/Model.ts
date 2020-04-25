@@ -4,6 +4,7 @@ import { strategies, data } from './strategies/Strategies';
 import Predictor from './Predictor';    
 import Data from './strategies/Data';
 
+
 export default class Model {
     @observable private data?: Data;
     @observable private predictor: Predictor = new Predictor();
@@ -29,14 +30,15 @@ export default class Model {
         this.data = data[alg];
     }
 
-    public setPredictoOptions(config: string): void {
+    public setPredictorOptions(config: string): void {
         this.predictor.setOpt(config);
     }
 
     /** Save the predictor in function */
     public train(): void {
-        if(this.strategy && this.data){
-            this.predictor = this.strategy.train(this.data, this.predictor.getOpt());
+        const opt = this.predictor.getOpt();
+        if(this.strategy && this.data && opt){
+            this.predictor = this.strategy.train(this.data, opt);
             this.data.setPointsLine(this.predictor.getCoef());
         }    
     }

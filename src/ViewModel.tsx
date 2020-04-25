@@ -52,18 +52,18 @@ export default class ViewModel extends React.Component {
         const reader = new FileReader(); // declare file reader
         if(input) {
             reader.readAsText(input); // read file
-            reader.onload = (event) => { // when loaded
-                try {
+            try {
+                reader.onload = (event) => { // when loaded
                     ViewModel.validateFile(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' )
                     const data: number[][] = ViewModel.parseCSVtoData(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
                     this.model.setData(data);
                     this.setState({graphPt: this.model.getData()});
                     let t = document.getElementById('train');
                     if(t) t.setAttribute('style','display: block');
-                } catch(e){
-                    alert(e);
-                }
-            };
+                };
+            } catch(e){
+                alert(e);
+            }
         }
     }
 
@@ -71,17 +71,17 @@ export default class ViewModel extends React.Component {
         if(input) {
             const reader = new FileReader(); // declare file reader
             const exstension: string | undefined = input.name.split('.').pop();
-            if(exstension === 'json') {
+            if(exstension == 'json') {
                 reader.readAsText(input); // read file
-                reader.onload = (event) => { // when loaded
-                    try {
+                try {
+                    reader.onload = (event) => { // when loaded
                         const config: string = (event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
-                        this.model.setPredictoOptions(config);
+                        this.model.setPredictorOptions(config);
                         this.setState({options: this.model.getPredictor().getOpt()});
-                    } catch (e) {
-                        alert(e);
-                    }
-                };
+                    };
+                } catch (e) {
+                    alert(e);
+                }
             } else
                 alert('File extension is not json!');
         }

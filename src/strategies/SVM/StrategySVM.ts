@@ -6,7 +6,7 @@ import OptionSVM from "./OptionSVM";
 export default class StrategySVM implements Strategy{
 
     /** SVM predictor: 
-     {
+        {
          N: numero di punti
          D: dimensione dei punti (es. 2,3..)
          b: c della retta in forma implicita

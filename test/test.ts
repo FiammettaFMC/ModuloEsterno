@@ -1,10 +1,13 @@
 import 'jest';
 import Predictor from '../src/Predictor';
 import Model from '../src/Model';
-import { DataPoint } from 'regression';
 import StrategyRL from '../src/strategies/RL/StrategyRL';
 import StrategySVM from '../src/strategies/SVM/StrategySVM';
 import ViewModel from '../src/ViewModel';
+import OptionRL from '../src/strategies/RL/OptionRL';
+import DataRL from '../src/strategies/RL/DataRL';
+import OptionSVM from '../src/strategies/SVM/OptionSVM';
+import DataSVM from '../src/strategies/SVM/DataSVM';
 
 jest.mock('react-plotlyjs-ts',()=>{});
 
@@ -21,29 +24,39 @@ beforeAll(() => {
 //TEST PREDICTOR
 
 test('construnctor', ()=> {
-    let pred = new Predictor('RL',[1,2],'y = 2x +4',{ord: 2, prec: 3});
+    let pred = new Predictor('RL',[1,2],'y = 2x +4',new OptionRL());
     expect(pred.getAlg()).toBe('RL');    
     expect(pred.getCoef()).toEqual([1,2]);    
     expect(pred.getFun()).toBe('y = 2x +4');    
-    expect(pred.getOpt()).toEqual({ord: 2, prec: 3});    
+    expect(pred.getOpt()).toEqual(new OptionRL());    
 });
 
-test('parsePredictorFromJSONtoObjectAndReturnOpt', ()=> {
-    expect(Predictor.fromJSON('{ "opt": 2 }')).toBe(2);
-});
-
-test('parsePredictorFromJSONtoObjectThrowError', ()=> {
-    expect(() => {Predictor.fromJSON('opt": 2 }')}).toThrowError(new Error('Predictor bad formatted'));
+test('setPredictor',()=>{
+    let pred = new Predictor();
+    pred.setOpt('{}');
+    pred.setAlg('RL');
+    pred.setCoef([1,2]);
+    pred.setFun('y = 2x +4');
+    pred.setOpt(`{
+        "algorithm": "RL",
+        "coefficients": [1.3691,1.3827],
+        "predFun": "y = 1.3691x + 1.3827",
+        "opt": {"order":2,"precision":2}
+    }`);
+    expect(pred.getAlg()).toBe('RL');    
+    expect(pred.getCoef()).toEqual([1,2]);    
+    expect(pred.getFun()).toBe('y = 2x +4');    
+    expect(pred.getOpt()).toEqual(new OptionRL());
 });
 
 test('parseStringtoJSONPredictor', ()=> {
-    let pred = new Predictor('RL',[1,2],'y=2x+1',{ord:2,prec:2});
-    expect(pred.toJSON()).toBe(
+    let pred = new Predictor('RL',[1,2],'y=2x+1',new OptionRL());
+    expect(pred.toJSON()).toEqual(
 `{
     "algorithm": "RL",
     "coefficients": [1,2],
     "predFun": "y=2x+1",
-    "opt": {"ord":2,"prec":2}
+    "opt": {"order":2,"precision":2}
 }`);
 });
 
@@ -55,89 +68,118 @@ test('setPredictorAlgorithm', ()=> {
     expect(model.getPredictor().getAlg()).toBe('RL');
 });
 
-test('setAlgorithmOptions', ()=> {
-    model.setOptions({"ord": 2, "pre": 2});
-    expect(model.getPredictor().getOpt()).toEqual({"ord": 2, "pre": 2});
+test('setPredictorOptions', ()=> {
+    model.setPredictorOptions(`{
+        "algorithm": "RL",
+        "coefficients": [1.3691,1.3827],
+        "predFun": "y = 1.3691x + 1.3827",
+        "opt": {"order":2,"precision":2}
+    }`);
+    expect(model.getPredictor().getOpt()).toEqual(new OptionRL());
 });
 
 test('setData', ()=> {
+    let mod = new Model();
+    mod.setData([[1,2]]);
     model.setData([[1,1],[2,2]]);
-    expect(model.getData()).toEqual([[1,1],[2,2]]);
+    let dat = new DataRL();
+    dat.setValue([[1,1],[2,2]]);
+    expect(model.getData()).toEqual(dat);
 });
 
 test('trainOnModel', ()=> {
     let mod = new Model();
     mod.train();
     model.train();
-    expect(model.getPredictor()).toEqual(new Predictor('RL',[1,0],'y = 1x',{"ord": 2, "pre": 2}));
-});
-
-test('dataToChartOnModel', ()=> {
-    let mod0 = new Model();
-    mod0.datatoChart([[1,2],[3,4]]);
-    expect(model.datatoChart(model.getData())).toEqual([[1,2],[1,2],[]]); //RL
-    let mod = new Model();
-    mod.setAlgorithm('SVM');
-    mod.setData([[0,1,1],[1,0,-1]]);
-    expect(mod.datatoChart(mod.getData())).toEqual([[0],[1],[1],[0],[],[]]); //SVM
-});
-
-test('dataToLineModel', ()=> {
-    let mod0 = new Model();
-    mod0.datatoLine([[1,2],[3,4]]);
-    expect(model.datatoLine([[1,2],[1,2],[]])).toEqual([[1,2],[1,2],[1,2]]); //RL
-    let mod = new Model();
-    mod.setAlgorithm('SVM');
-    mod.setData([[0,1,1],[1,0,-1]]);
-    mod.setOptions({});
-    mod.train();
-    expect(mod.datatoLine([[0],[1],[1],[0],[],[]])).toEqual([[0],[1],[1],[0],[0,1],[0,1]]); //SVM
+    expect(model.getPredictor()).toEqual(new Predictor('RL',[1,0],'y = 1x',new OptionRL()));
 });
 
 test('downloadPredictor',()=>{
     model.downloadPredictor();
 });
 
-//TEST STRATEGYRL
-
-test('parseArrayToDataPointOnStrategyRL', ()=> {
-    let datap: DataPoint[] = [];
-    datap.push([1,1],[2,2]);
-    expect(StrategyRL.parseArrayToDataPoint(model.getData())).toEqual(datap);
+// TEST DATARL
+test('getDataRL',()=>{
+    let dat = new DataRL();
+    dat.setValue([[1,1],[2,2]]);
+    expect(dat.getXPoints()).toEqual([1,2]);
+    expect(dat.getYPoints()).toEqual([1,2]);
+    dat.setPointsLine([1,0]);
+    expect(dat.getYLine()).toEqual([1,2]);
 });
+
+// TEST DATASVM
+test('getDataSVM',()=>{
+    let dat = new DataSVM();
+    dat.setValue([[0,1,1],[1,0,-1]]);
+    expect(dat.getXRPoints()).toEqual([0]);
+    expect(dat.getXWPoints()).toEqual([1]);
+    expect(dat.getYRPoints()).toEqual([1]);
+    expect(dat.getYWPoints()).toEqual([0]);
+    expect(dat.getPoints()).toEqual([[0,1],[1,0]]);
+    expect(dat.getLabels()).toEqual([1,-1]);
+    dat.setPointsLine([0,-1,1]);
+    expect(dat.getXLine()).toEqual([0,1]);
+    expect(dat.getYLine()).toEqual([0,1]);
+});
+
+// TEST OPTIONRL
+
+test('setAndgetPrecRL',()=>{
+    let op = new OptionRL();
+    op.setPrecision(3);
+    expect(op.getPrecision()).toBe(3);
+    expect(op.getOrder()).toBe(2);
+});
+
+test('importJSONErrorRL',()=>{
+    let op = new OptionRL();
+    expect(() => {op.setValueFile('{"opt}')}).toThrowError(new Error('Predictor bad formatted'));    
+});
+
+// TEST OPTIONSVM
+
+test('setAndgetPrecSVM',()=>{
+    let op = new OptionSVM();
+    op.setC(2);
+    op.setMaxIter(10100);
+    op.setNumPass(14);
+    expect(op.getC()).toBe(2);
+    expect(op.getMaxIter()).toBe(10100);
+    expect(op.getNumPass()).toBe(14);
+});
+
+test('importJSONSVM',()=>{
+    let op = new OptionSVM();
+    expect(() => {op.setValueFile('{"opt}')}).toThrowError(new Error('Predictor bad formatted'));    
+    op.setValueFile(`{
+        "algorithm": "RL",
+        "coefficients": [1.3691,1.3827],
+        "predFun": "y = 1.3691x + 1.3827",
+        "opt": {"C":2,"maxiter":10100,"numpass":12}
+    }`);
+    expect(op.getC()).toBe(2);
+    expect(op.getMaxIter()).toBe(10100);
+    expect(op.getNumPass()).toBe(12);
+});
+
+//TEST STRATEGYRL
 
 test('trainOnStrategyRL', ()=> {
     let rl = new StrategyRL();
-    expect(rl.train(model.getData(),{})).toEqual(new Predictor('RL',[1,0],'y = 1x'));
-    expect(rl.train(model.getData(),{"ord": 2, "pre": 2})).toEqual(new Predictor('RL',[1,0],'y = 1x',{"ord": 2, "pre": 2}));
+    let dat = new DataRL();
+    dat.setValue([[1,1],[2,2]]);
+    expect(rl.train(dat,new OptionRL())).toEqual(new Predictor('RL',[1,0],'y = 1x', new OptionRL()));
 });
 
-test('datatoChartOnStrategyRL', ()=> {
-    let rl = new StrategyRL();
-    expect(rl.datatoChart(model.getData())).toEqual([[1,2],[1,2],[]]);
-});
-
-test('datatoLineOnStrategyRL', ()=> {
-    let rl = new StrategyRL();
-    expect(rl.datatoLine([[1,2],[1,2],[]],model.getPredictor().getCoef())).toEqual([[1,2],[1,2],[1,2]]);
-});
 
 //TEST STRATEGYSVM
 
 test('trainOnStrategySVM', ()=> {
     let svm = new StrategySVM();
-    expect(svm.train([[0,1,1],[1,0,-1]],{})).toEqual(new Predictor('SVM',[0,-1,1],'y = 1x + 0'));
-    expect(svm.train([[0,1,1],[1,0,-1]],{"C": 1, "maxiter": 10000, "numpass": 10})).toEqual(new Predictor('SVM',[0,-1,1],'y = 1x + 0',{"C": 1, "maxiter": 10000, "numpass": 10}));
-});
-
-test('datatoChartOnStrategySVM', ()=> {
-    let svm = new StrategySVM();
-    expect(svm.datatoChart([[0,1,1],[1,0,-1]])).toEqual([[0],[1],[1],[0],[],[]]);
-});
-
-test('datatoLineOnStrategySVM', ()=> {
-    let svm = new StrategySVM();
-    expect(svm.datatoLine([[0],[1],[1],[0],[],[]],[0,-1,1])).toEqual([[0],[1],[1],[0],[0,1],[0,1]]);
+    let dat = new DataSVM();
+    dat.setValue([[0,1,1],[1,0,-1]]);
+    expect(svm.train(dat,new OptionSVM())).toEqual(new Predictor('SVM',[0,-1,1],'y = 1x + 0', new OptionSVM()));
 });
 
 
@@ -174,10 +216,6 @@ test('selecttAlgorithm',() => {
     vm.selectAlgorithm();    
 });
 
-test('setConfig',() => {
-    vm.setConfig({ord: 2, prec: 2});    
-});
-
 test('loadOptOnViewMOdel',()=>{ 
     const blob: any = new Blob(['{ "opt": 2 }'], { type: "text/html" });
     blob.lastModifiedDate = new Date();
@@ -191,12 +229,13 @@ test('Render',() => {
     vm.render();
 });
 
-// test('trainOnViewModel',() => {
-//     const blob: any = new Blob(['1,2\n3,4'], { type: "text/html" });
-//     blob.lastModifiedDate = new Date();
-//     blob.name = "filename";
-//     const file = blob as File;
-//     vm.selectAlgorithm();
-//     vm.loadData(file);
-//     vm.train();
-// });
+test('trainOnViewModel',() => {
+    const blob: any = new Blob(['1,2\n3,4'], { type: "text/html" });
+    blob.lastModifiedDate = new Date();
+    blob.name = "filename";
+    const file = blob as File;
+    vm.setAlgorithm('RL');
+    vm.selectAlgorithm();
+    vm.loadData(file);
+    vm.train();
+});

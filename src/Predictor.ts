@@ -5,13 +5,13 @@ export default class Predictor {
     private algorithm: string;
     private coefficients: number[];
     private predFun: string;
-    private opt: Option;
+    private opt?: Option;
 
-    constructor(alg?: string, coef?: number[], func?: string, opt?: any) {
+    constructor(alg?: string, coef?: number[], func?: string, opt?: Option) {
         this.algorithm = alg ? alg : '';
         this.coefficients = coef ? coef: [];
         this.predFun = func ? func : '';
-        this.opt = opt ? opt : {};
+        if(opt) this.opt = opt;
     }
 
     getAlg(): string {
@@ -44,7 +44,7 @@ export default class Predictor {
     }
     
     setOpt(conf: string){
-        this.opt.setValueFile(conf);
+        this.opt?.setValueFile(conf);
     }
 
     toJSON(): string {
