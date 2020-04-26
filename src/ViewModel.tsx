@@ -55,7 +55,7 @@ export default class ViewModel extends React.Component {
             try {
                 reader.onload = (event) => { // when loaded
                     ViewModel.validateFile(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' )
-                    const data: number[][] = ViewModel.parseCSVtoData(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
+                    const data = ViewModel.parseCSVtoData(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
                     this.model.setData(data);
                     this.setState({graphPt: this.model.getData()});
                     let t = document.getElementById('train');

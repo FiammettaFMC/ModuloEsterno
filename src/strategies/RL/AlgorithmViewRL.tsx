@@ -17,8 +17,12 @@ export default class AlgorithmViewRL extends React.Component<Actions> {
     render() {
         const { options, graphPt } = this.props;
         return (
-            <div>  
+            <div className="graph-container">  
                 
+				<div className="text-center">
+					<h3>Grafico</h3>
+				</div>
+				
                 <Plot
                     data={[
                         {
@@ -27,31 +31,69 @@ export default class AlgorithmViewRL extends React.Component<Actions> {
                             type: 'scatter',
                             mode: 'markers',
                             marker: {color: 'orange', size: 7 },
-                            name: 'Punti',
+                            name: '<span style="color: #d8d9da">Punti</span>',
                         },
                         {   
                             x: graphPt.getXPoints(),
                             y: graphPt.getYLine(),
                             type: 'lines',
                             mode: 'lines',
-                            line: {color: 'blue', width: 2},
-                            name: 'Retta',
+                            line: {color: 'red', width: 2},
+                            name: '<span style="color: #d8d9da">Retta</span>',
                         }
                     ]}
-                    layout={ {width: 700, height: 400, title: 'Grafico'} }
+                    layout={
+						{
+                            xaxis: {
+                                gridcolor: '#d8d9da',
+								zerolinecolor: '#d8d9da',
+								tickfont: {
+                                    size: 14,
+									color: '#d8d9da'
+								},
+							},
+							yaxis: {
+                                gridcolor: '#d8d9da',
+								zerolinecolor: '#d8d9da',
+								tickfont: {
+                                    size: 14,
+									color: '#d8d9da'
+								},
+							},
+							margin: {
+                                l: 50,
+								r: 35,
+								b: 50,
+								t: 25,
+								pad: 4
+							},
+							autosize: true,
+							responsive: true,
+							plot_bgcolor: '#161719',
+							paper_bgcolor: '#161719'							
+						}
+					}
                 />
                 
-                <h3>Choose the algorithm options (if you want)</h3>
+				<div className="text-center">
+					<h3>Choose the algorithm options (if you want)</h3>
+				</div>
+				
                 <div id="RLopt">
-                    <span>Choose the precision: </span>
-                    <select value={options.getPrecision()} onChange={(event) => {options.setPrecision(Number(event.target.value)); this.setState({prec: options.getPrecision()})}} >
-                        <option value='1'>1</option>
-                        <option value='2'>2</option>
-                        <option value='3'>3</option>
-                        <option value='4'>4</option>
-                        <option value='5'>5</option>
-                    </select>
+				
+					<div className="form">
+						<span className="form-label"><strong>Precision</strong>: </span>
+						<select value={options.getPrecision()} onChange={(event) => {options.setPrecision(Number(event.target.value)); this.setState({prec: options.getPrecision()})}} >
+							<option value='1'>1</option>
+							<option value='2'>2</option>
+							<option value='3'>3</option>
+							<option value='4'>4</option>
+							<option value='5'>5</option>
+						</select><br></br>
+					</div>
+					
                 </div>
+				
             </div>
         );
     }

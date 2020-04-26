@@ -31,73 +31,112 @@ export default class View extends React.Component<Actions> {
                 buttonTrain, predictor, buttonDownload} = this.props;
         return (
             <div className="App">
-            <header className="App-header">
-                <h1>Training Module</h1>
-            </header>
-            <main>
-                <span>Choose the algorithm to use for the training: </span>
-                <select disabled={false} id="alg" onChange={selectAlg}>
-                    <option value="RL">Regressione Lineare (RL)</option>
-                    <option value="SVM">Support Vector Machine (SVM)</option>
-                </select>
-                <button onClick={buttonSelectAlg}>Confirm</button>
+            
+                <header className="App-header">
+                    <h1>Training Module</h1>
+                </header>
                 
-                <br></br>
+                <main>
                 
-                <div id='import' style={{display: 'none'}}>
+                    <div className="choose-section">
+                        <div className="container-50">
+                            <div className="form">
+                                <span className="form-label">Choose the algorithm to use for the training: </span>
+                                <select className="form-input" disabled={false} id="alg" onChange={selectAlg}>
+                                    <option value="RL">Regressione Lineare (RL)</option>
+                                    <option value="SVM">Support Vector Machine (SVM)</option>
+                                </select><br></br>
+                            </div>
+                            <button onClick={buttonSelectAlg}>Confirm</button>
+                        </div>
+                    </div>
+                                
+                    <div id='import' style={{display: 'none'}}>
 
-                    <span>Import data with a csv file: </span>
-                    <input
-                        type="file"
-                        name="data"
-                        id="data"
-                        onChange={buttonInputData}
-                        accept=".csv,.txt"
-                    />
+                        <div className="import-section">
+                            <div className="container">
+                                <div className="row">
+                                
+                                    <div className="col-lg-6">
+                                        <div className="properties">
+                                        
+                                        <div className="text-center">
+                                            <h3 id="options" >Editor</h3>
+                                        </div>
+                                            
+                                            <div className="form">
+                                                <span className="form-label">Import data (.csv):</span>
+                                                <input
+                                                    className="form-input"
+                                                    type="file"
+                                                    name="data"
+                                                    id="data"
+                                                    onChange={buttonInputData}
+                                                    accept=".csv,.txt"
+                                                />
+                                            </div>
+                                            
+                                            <div className="form">
+                                                <span className="form-label">Import previous options (.json)</span>
+                                                <input
+                                                    className="form-input"
+                                                    type="file"
+                                                    name="opt"
+                                                    id="opt"
+                                                    onChange={buttonInputOpt}
+                                                    accept=".json"
+                                                />
+                                            </div>
+                                                
+                                            <input
+                                                id='train'
+                                                type="button"
+                                                value="Train 🚂"
+                                                onClick={buttonTrain}
+                                                style={{display: 'none'}}
+                                            />
 
-                    <br></br>
-                    
-                    <span>Import algorithm options with a json file: </span>
-                    <input
-                        type="file"
-                        name="opt"
-                        id="opt"
-                        onChange={buttonInputOpt}
-                        accept=".json"
-                    />
+                                            <p></p>
+                                            
+                                            <p className='function'  style={{display: 'none'}}>Function: {predictor}</p>
 
-                </div>
+                                            <div className="button-row">
+                                                <input
+                                                    type="button"
+                                                    value="Download Predictor"
+                                                    id = "download"
+                                                    onClick={buttonDownload}
+                                                    style={{display: 'none'}}
+                                                />
+                                                
+                                                <input
+                                                    id='reset'
+                                                    type="button"
+                                                    value="Reset"
+                                                    onClick={() => {window.location.reload(false)}}
+                                                    style={{display: 'none'}}
+                                                />
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="col-lg-6">
+                                        <div className="graph">
+                                            {this.renderAlgorithmView()}
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                            
 
-                {this.renderAlgorithmView()}
-
-                <input
-                    id='train'
-                    type="button"
-                    value="Train 🚂"
-                    onClick={buttonTrain}
-                    style={{display: 'none'}}
-                />
-
-                <p></p>
-                <input
-                    id='reset'
-                    type="button"
-                    value="Reset"
-                    onClick={() => {window.location.reload(false)}}
-                    style={{display: 'none'}}
-                />
-
-                <p className='function'  style={{display: 'none'}}>Function: {predictor}</p>
-
-                <input
-                    type="button"
-                    value="Download Predictor"
-                    id = "download"
-                    onClick={buttonDownload}
-                    style={{display: 'none'}}
-                />
-            </main>
-        </div>
-    );
-  }
+                    </div>
+                
+                </main>
+                
+            </div>
+        );
+    }
 }

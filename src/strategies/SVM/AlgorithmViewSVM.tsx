@@ -25,9 +25,13 @@ export default class AlgrithmViewSVM extends React.Component<Actions> {
     }
 
     render() {
-        const { options, graphPt } = this.props;
+        const { options, graphPt } = this.props;        
         return (
             <div>
+			
+				<div className="text-center">
+					<h3>Grafico</h3>
+				</div>
 
                 <Plot
                     data={[
@@ -37,7 +41,7 @@ export default class AlgrithmViewSVM extends React.Component<Actions> {
                             type: 'scatter',
                             mode: 'markers',
                             marker: {color: 'green', size: 7 },
-                            name: 'Punti',
+                            name: '<span style="color: #d8d9da">Punti</span>',
                         },
                         {
                             x: graphPt.getXWPoints(),
@@ -45,35 +49,77 @@ export default class AlgrithmViewSVM extends React.Component<Actions> {
                             type: 'scatter',
                             mode: 'markers',
                             marker: {color: 'red', size: 7 },
-                            name: 'Punti',
+                            name: '<span style="color: #d8d9da">Punti</span>',
                         },
                         {   
                             x: graphPt.getXLine(),
                             y: graphPt.getYLine(),
                             type: 'lines',
                             mode: 'lines',
-                            line: {color: 'blue', width: 2},
-                            name: 'Retta',
+                            line: {color: 'yellow', width: 2},
+                           name: '<span style="color: #d8d9da">Retta</span>',
                         }
                     ]}
-                    layout={ {width: 700, height: 400, title: 'Grafico'} }
+                    layout={
+						{
+							xaxis: {
+								gridcolor: '#d8d9da',
+								zerolinecolor: '#d8d9da',
+								tickfont: {
+									size: 14,
+									color: '#d8d9da'
+								},
+							},
+							yaxis: {
+								gridcolor: '#d8d9da',
+								zerolinecolor: '#d8d9da',
+								tickfont: {
+									size: 14,
+									color: '#d8d9da'
+								},
+							},
+							margin: {
+								l: 50,
+								r: 35,
+								b: 50,
+								t: 25,
+								pad: 4
+							},
+							autosize: true,
+							responsive: true,
+							plot_bgcolor: '#161719',
+							paper_bgcolor: '#161719'							
+						}
+					}
                 />
-               
-                <h3 id="options" >Choose the algorithm options (if you want)</h3>
-                <label>Kernel type: linear</label>
-                <br></br>
-                <label>Alpha Tollerance: 1e-7</label>
-                <br></br>
-                <label>Tollerance: 1e-4</label>
-                <br></br>
+                
+				<div className="text-center">
+					<h3 id="options" >Choose the algorithm options (if you want)</h3>
+				</div>
+				
+                <label className="form-label form-label-2 mb-2"><strong>Kernel type</strong>: linear</label>
+                <label className="form-label form-label-2 mb-2"><strong>Alpha Tollerance</strong>: 1e-7</label>
+                <label className="form-label form-label-2 mb-10"><strong>Tollerance</strong>: 1e-4</label>
+				
                 <div id="SVMopt">
-                    <label>C:</label>
-                    <input type="number" id="C" value={options.getC()} onChange={(event) => {options.setC(Number(event.target.value)); this.setState({opt: options.getC()})}} /> 
-                    <label>Max iterations:</label>
-                    <input type="number" id="maxiter" value={options.getMaxIter()} onChange={(event) => {options.setMaxIter(Number(event.target.value)); this.setState({opt: options.getMaxIter()})}} />
-                    <label>Number passes:</label>
-                    <input type="number" id="numpas" value={options.getNumPass()} onChange={(event) => {options.setNumPass(Number(event.target.value)); this.setState({opt: options.getNumPass()})}} />
+				
+					<div className="form">
+						<label className="form-label"><strong>C</strong>:</label>
+						<input type="number" id="C" value={options.getC()} onChange={(event) => {options.setC(Number(event.target.value)); this.setState({opt: options.getC()})}} /> 
+                    </div>
+					
+					<div className="form">
+						<label className="form-label"><strong>Max iterations</strong>:</label>
+						<input type="number" id="maxiter" value={options.getMaxIter()} onChange={(event) => {options.setMaxIter(Number(event.target.value)); this.setState({opt: options.getMaxIter()})}} />
+                    </div>
+					
+					<div className="form">
+						<label className="form-label"><strong>Number passes</strong>:</label>
+						<input type="number" id="numpas" value={options.getNumPass()} onChange={(event) => {options.setNumPass(Number(event.target.value)); this.setState({opt: options.getNumPass()})}} />
+                    </div>
+					
                 </div>
+				
             </div>
         );
     }
