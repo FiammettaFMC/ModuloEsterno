@@ -24,19 +24,19 @@ export default class DataRL implements Data {
         });
     }
 
-    public getPoints() {
+    public getPoints(): DataPoint[] {
         return this.points;
     }
 
-    public getXPoints() {
+    public getXPoints(): number[] {
         return this.xpoints;
     }
 
-    public getYPoints() {
+    public getYPoints(): number[] {
         return this.ypoints;
     }
 
-    public getYLine() {
+    public getYLine(): number[] {
         return this.yline;
     }
 

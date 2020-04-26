@@ -26,7 +26,7 @@ export default class Predictor {
         return this.predFun;
     }
     
-    getOpt(){
+    getOpt(): Option | undefined {
         return this.opt;
     }
 

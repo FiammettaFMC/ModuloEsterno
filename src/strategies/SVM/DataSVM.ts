@@ -33,35 +33,35 @@ export default class DataSVM implements Data {
         });
     }
 
-    public getPoints() {
+    public getPoints(): number[][] {
         return this.points;
     }
 
-    public getLabels() {
+    public getLabels(): number[] {
         return this.labels;
     }
 
-    public getXRPoints() {
+    public getXRPoints(): number[] {
         return this.xRpoints;
     }
     
-    public getXWPoints() {
+    public getXWPoints(): number[] {
         return this.xWpoints;
     }
     
-    public getYRPoints() {
+    public getYRPoints(): number[] {
         return this.yRpoints;
     }
     
-    public getYWPoints() {
+    public getYWPoints(): number[] {
         return this.yWpoints;
     }
     
-    public getXLine() {
+    public getXLine(): number[] {
         return this.xline;
     }
 
-    public getYLine() {
+    public getYLine(): number[] {
         return this.yline;
     }
 };

@@ -71,7 +71,7 @@ export default class ViewModel extends React.Component {
         if(input) {
             const reader = new FileReader(); // declare file reader
             const exstension: string | undefined = input.name.split('.').pop();
-            if(exstension == 'json') {
+            if(exstension === 'json') {
                 reader.readAsText(input); // read file
                 try {
                     reader.onload = (event) => { // when loaded
