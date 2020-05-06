@@ -38,7 +38,7 @@ export default class AlgorithmViewRL extends React.Component<Actions> {
                             y: graphPt.getYLine(),
                             type: 'lines',
                             mode: 'lines',
-                            line: {color: 'red', width: 2},
+                            line: {color: 'red', width: 3},
                             name: '<span style="color: #d8d9da">Retta</span>',
                         }
                     ]}

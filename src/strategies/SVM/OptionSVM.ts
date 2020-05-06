@@ -40,4 +40,4 @@ export default class OptionSVM implements Option {
         }
     }
 
-};
+}

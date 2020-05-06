@@ -24,11 +24,12 @@ beforeAll(() => {
 //TEST PREDICTOR
 
 test('construnctor', ()=> {
-    let pred = new Predictor('RL',[1,2],'y = 2x +4',new OptionRL());
+    let pred = new Predictor('RL',[1,2],'y = 2x +4',new OptionRL(),0.3);
     expect(pred.getAlg()).toBe('RL');    
     expect(pred.getCoef()).toEqual([1,2]);    
     expect(pred.getFun()).toBe('y = 2x +4');    
-    expect(pred.getOpt()).toEqual(new OptionRL());    
+    expect(pred.getOpt()).toEqual(new OptionRL());
+    expect(pred.getAcc()).toBe(0.3);
 });
 
 test('setPredictor',()=>{
@@ -50,13 +51,17 @@ test('setPredictor',()=>{
 });
 
 test('parseStringtoJSONPredictor', ()=> {
-    let pred = new Predictor('RL',[1,2],'y=2x+1',new OptionRL());
+    let pred = new Predictor('RL',[1,2],'y=2x+1',new OptionRL(),0.3);
     expect(pred.toJSON()).toEqual(
 `{
+    "GroupName": "ProApes",
+    "Version": "1.5",
+    "PluginName": "PredireInGrafana",
     "algorithm": "RL",
     "coefficients": [1,2],
     "predFun": "y=2x+1",
-    "opt": {"order":2,"precision":2}
+    "opt": {"order":2,"precision":2},
+    "accuracy": "0.3"
 }`);
 });
 
@@ -91,7 +96,7 @@ test('trainOnModel', ()=> {
     let mod = new Model();
     mod.train();
     model.train();
-    expect(model.getPredictor()).toEqual(new Predictor('RL',[1,0],'y = 1x',new OptionRL()));
+    expect(model.getPredictor()).toEqual(new Predictor('RL',[1,0],'y = 1x',new OptionRL(),1));
 });
 
 test('downloadPredictor',()=>{
@@ -169,7 +174,7 @@ test('trainOnStrategyRL', ()=> {
     let rl = new StrategyRL();
     let dat = new DataRL();
     dat.setValue([[1,1],[2,2]]);
-    expect(rl.train(dat,new OptionRL())).toEqual(new Predictor('RL',[1,0],'y = 1x', new OptionRL()));
+    expect(rl.train(dat,new OptionRL())).toEqual(new Predictor('RL',[1,0],'y = 1x', new OptionRL(),1));
 });
 
 
@@ -177,9 +182,15 @@ test('trainOnStrategyRL', ()=> {
 
 test('trainOnStrategySVM', ()=> {
     let svm = new StrategySVM();
-    let dat = new DataSVM();
-    dat.setValue([[0,1,1],[1,0,-1]]);
-    expect(svm.train(dat,new OptionSVM())).toEqual(new Predictor('SVM',[0,-1,1],'y = 1x + 0', new OptionSVM()));
+    let dat0 = new DataSVM();
+    let dat1 = new DataSVM();
+    let dat2 = new DataSVM();
+    dat0.setValue([[0,1,1],[1,0,-1]]);
+    expect(svm.train(dat0,new OptionSVM())).toEqual(new Predictor('SVM',[0,-1,1],'y = 1x + 0', new OptionSVM(),1));
+    dat1.setValue([[0,1,-1],[1,2,1],[2,1,-1],[-1,0,1],[0,-1,-1],[1,0,1]]);
+    expect(svm.train(dat1,new OptionSVM())).toEqual(new Predictor('SVM',[0,-1,1],'y = 1x + 0', new OptionSVM(),2/3));
+    dat2.setValue([[0,1,-1],[1,2,-1],[2,1,-1],[-1,0,-1],[0,-1,-1],[1,0,-1],[0,0,-1],[1,1,-1],[2,2,-1],[10,-10,-1]]);
+    expect(svm.train(dat2,new OptionSVM())).toEqual(new Predictor('SVM',[0,0,0],'y = NaNx + NaN', new OptionSVM(),0));
 });
 
 
@@ -218,11 +229,16 @@ test('selecttAlgorithm',() => {
 
 test('loadOptOnViewMOdel',()=>{ 
     const blob: any = new Blob(['{ "opt": 2 }'], { type: "text/html" });
+    const blob2: any = new Blob(['{ "opt": 2 }'], { type: "text/html" });
     blob.lastModifiedDate = new Date();
     blob.name = "training.json";
+    blob2.lastModifiedDate = new Date();
+    blob2.name = "training.txt";
     const file = blob as File;
-    vm.loadOpt(file);
+    const file2 = blob2 as File;
     vm.loadOpt(null);
+    vm.loadOpt(file2);
+    vm.loadOpt(file);
 });
 
 test('Render',() => {

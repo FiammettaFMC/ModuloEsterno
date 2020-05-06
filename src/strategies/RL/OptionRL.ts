@@ -25,4 +25,4 @@ export default class OptionRL implements Option {
             throw new Error('Predictor bad formatted');
         }
     }
-};
+}

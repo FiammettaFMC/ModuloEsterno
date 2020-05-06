@@ -8,6 +8,8 @@ interface Actions {
     buttonInputOpt: (event: ChangeEvent<HTMLInputElement>) => void,
     buttonTrain: () => void,
     predictor: string,
+    nameAcc: string,
+    accuracy: number | undefined,
     buttonDownload: () => void,
     AlgView?: typeof React.Component,
     options: any,
@@ -28,7 +30,7 @@ export default class View extends React.Component<Actions> {
 
     render(){
         const { buttonSelectAlg, selectAlg, buttonInputData, buttonInputOpt,
-                buttonTrain, predictor, buttonDownload} = this.props;
+                buttonTrain, predictor, nameAcc, accuracy, buttonDownload} = this.props;
         return (
             <div className="App">
             
@@ -99,6 +101,7 @@ export default class View extends React.Component<Actions> {
                                             <p></p>
                                             
                                             <p className='function'  style={{display: 'none'}}>Function: {predictor}</p>
+                                            <p className='function'  style={{display: 'none'}}>{nameAcc}: {accuracy}</p>
 
                                             <div className="button-row">
                                                 <input

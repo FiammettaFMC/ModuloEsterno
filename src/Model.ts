@@ -20,7 +20,7 @@ export default class Model {
 
     /** Load file and save it in data */
     public setData(input: number[][]): void {
-        this.data?.setValue(input);
+        if(this.data) this.data.setValue(input);
     }
 
     /** Set the algorithm to use thanks to the Context*/

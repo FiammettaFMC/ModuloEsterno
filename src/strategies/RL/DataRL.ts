@@ -40,4 +40,4 @@ export default class DataRL implements Data {
         return this.yline;
     }
 
-};
+}

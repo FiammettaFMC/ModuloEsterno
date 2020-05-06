@@ -55,8 +55,8 @@ export default class ViewModel extends React.Component {
             try {
                 reader.onload = (event) => { // when loaded
                     ViewModel.validateFile(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' )
-                    const data = ViewModel.parseCSVtoData(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
-                    this.model.setData(data);
+                    const dat = ViewModel.parseCSVtoData(event.target ? (event.target.result ? event.target.result.toString() : '' ): '' );
+                    this.model.setData(dat);
                     this.setState({graphPt: this.model.getData()});
                     let t = document.getElementById('train');
                     if(t) t.setAttribute('style','display: block');
@@ -106,8 +106,11 @@ export default class ViewModel extends React.Component {
         if(this.model.getData()){
             this.model.train();
             this.setState({graphPt: this.model.getData()});
-            let f = document.getElementsByClassName('function')[0];
-            if(f) f.setAttribute('style','display: block');
+            let f = document.getElementsByClassName('function');
+            if(f[0] && f[1]) {
+                f[0].setAttribute('style','display: block');
+                f[1].setAttribute('style','display: block');
+            }
             let r = document.getElementById('reset');
             if(r) r.setAttribute('style','display: block');
             let d = document.getElementById('download');
@@ -124,6 +127,8 @@ export default class ViewModel extends React.Component {
                     buttonInputOpt = {(e) => {this.loadOpt(e.target ? (e.target.files ? e.target.files[0]: null) : null )}} 
                     buttonTrain = {() => this.train()}
                     predictor = {this.model.getPredictor().getFun()}
+                    nameAcc = {this.algorithm === 'RL' ? 'R^2' : 'F-Measure'}
+                    accuracy = {this.model.getPredictor().getAcc()}
                     buttonDownload = {() => {this.model.downloadPredictor()}}
                     AlgView = {this.state.algView}
                     options = {this.state.options}

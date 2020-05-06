@@ -8,7 +8,7 @@ interface Actions {
     graphPt: DataSVM
 }
 
-export default class AlgrithmViewSVM extends React.Component<Actions> {
+export default class AlgorithmViewSVM extends React.Component<Actions> {
     
     /** Options:
     {
@@ -56,7 +56,7 @@ export default class AlgrithmViewSVM extends React.Component<Actions> {
                             y: graphPt.getYLine(),
                             type: 'lines',
                             mode: 'lines',
-                            line: {color: 'yellow', width: 2},
+                            line: {color: 'yellow', width: 3},
                            name: '<span style="color: #d8d9da">Retta</span>',
                         }
                     ]}

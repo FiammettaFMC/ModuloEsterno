@@ -6,12 +6,14 @@ export default class Predictor {
     private coefficients: number[];
     private predFun: string;
     private opt?: Option;
+    private accuracy?: number;
 
-    constructor(alg?: string, coef?: number[], func?: string, opt?: Option) {
+    constructor(alg?: string, coef?: number[], func?: string, option?: Option, acc?: number) {
         this.algorithm = alg ? alg : '';
         this.coefficients = coef ? coef: [];
         this.predFun = func ? func : '';
-        if(opt) this.opt = opt;
+        if(option) this.opt = option;
+        if(acc) this.accuracy = acc;
     }
 
     getAlg(): string {
@@ -30,6 +32,10 @@ export default class Predictor {
         return this.opt;
     }
 
+    getAcc(): number | undefined {
+        return this.accuracy;
+    }
+
     setAlg(alg: string) {
         this.algorithm = alg;
         this.opt = opt[alg];
@@ -44,16 +50,20 @@ export default class Predictor {
     }
     
     setOpt(conf: string){
-        this.opt?.setValueFile(conf);
+        if(this.opt) this.opt.setValueFile(conf);
     }
 
     toJSON(): string {
         const textFile = 
 `{
+    "GroupName": "ProApes",
+    "Version": "1.5",
+    "PluginName": "PredireInGrafana",
     "algorithm": "${this.algorithm}",
     "coefficients": [${this.coefficients}],
     "predFun": "${this.predFun}",
-    "opt": ${JSON.stringify(this.opt)}
+    "opt": ${JSON.stringify(this.opt)},
+    "accuracy": "${this.accuracy}"
 }`; // string output
         return textFile;
     }

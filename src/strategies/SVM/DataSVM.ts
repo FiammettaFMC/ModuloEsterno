@@ -64,4 +64,4 @@ export default class DataSVM implements Data {
     public getYLine(): number[] {
         return this.yline;
     }
-};
+}
