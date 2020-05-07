@@ -6,14 +6,14 @@ interface Actions {
     buttonSelectAlg: () => void,
     buttonInputData: (event: ChangeEvent<HTMLInputElement>) => void,
     buttonInputOpt: (event: ChangeEvent<HTMLInputElement>) => void,
-    data: number[][],
     buttonTrain: () => void,
     predictor: string,
+    nameAcc: string,
+    accuracy: number | undefined,
     buttonDownload: () => void,
     AlgView?: typeof React.Component,
-    options: {},
-    setConf: (config: object) => void,
-    graphPt: number[][]
+    options: any,
+    graphPt: any
 }
 
 export default class View extends React.Component<Actions> {
@@ -22,7 +22,6 @@ export default class View extends React.Component<Actions> {
         if(this.props.AlgView)
             return (<this.props.AlgView 
                         options = {this.props.options}
-                        setConf = {this.props.setConf}
                         graphPt = {this.props.graphPt}
                     />);
         else
@@ -31,68 +30,116 @@ export default class View extends React.Component<Actions> {
 
     render(){
         const { buttonSelectAlg, selectAlg, buttonInputData, buttonInputOpt,
-                data, buttonTrain, predictor, buttonDownload} = this.props;
+                buttonTrain, predictor, nameAcc, accuracy, buttonDownload} = this.props;
         return (
             <div className="App">
-            <header className="App-header">
-                <h1>Training Module</h1>
-            </header>
-            <main>
-                <span>Choose the algorithm to use for the training: </span>
-                <select disabled={false} id="alg" onChange={selectAlg}>
-                    <option value="RL">Regressione Lineare (RL)</option>
-                    <option value="SVM">Support Vector Machine (SVM)</option>
-                </select>
-                <button onClick={buttonSelectAlg}>Confirm</button>
+            
+                <header className="App-header">
+                    <h1>Training Module</h1>
+                </header>
                 
-                <br></br>
+                <main>
                 
-                <span>Import data with a csv file: </span>
-                <input
-                    type="file"
-                    name="data"
-                    id="data"
-                    onChange={buttonInputData} 
-                />
+                    <div className="choose-section">
+                        <div className="container-50">
+                            <div className="form">
+                                <span className="form-label">Choose the algorithm to use for the training: </span>
+                                <select className="form-input" disabled={false} id="alg" onChange={selectAlg}>
+                                    <option value="RL">Regressione Lineare (RL)</option>
+                                    <option value="SVM">Support Vector Machine (SVM)</option>
+                                </select><br></br>
+                            </div>
+                            <button onClick={buttonSelectAlg}>Confirm</button>
+                        </div>
+                    </div>
+                                
+                    <div id='import' style={{display: 'none'}}>
 
-                <br></br>
+                        <div className="import-section">
+                            <div className="container">
+                                <div className="row">
+                                
+                                    <div className="col-lg-6">
+                                        <div className="properties">
+                                        
+                                        <div className="text-center">
+                                            <h3 id="options" >Editor</h3>
+                                        </div>
+                                            
+                                            <div className="form">
+                                                <span className="form-label">Import data (.csv):</span>
+                                                <input
+                                                    className="form-input"
+                                                    type="file"
+                                                    name="data"
+                                                    id="data"
+                                                    onChange={buttonInputData}
+                                                    accept=".csv,.txt"
+                                                />
+                                            </div>
+                                            
+                                            <div className="form">
+                                                <span className="form-label">Import previous options (.json)</span>
+                                                <input
+                                                    className="form-input"
+                                                    type="file"
+                                                    name="opt"
+                                                    id="opt"
+                                                    onChange={buttonInputOpt}
+                                                    accept=".json"
+                                                />
+                                            </div>
+                                                
+                                            <input
+                                                id='train'
+                                                type="button"
+                                                value="Train 🚂"
+                                                onClick={buttonTrain}
+                                                style={{display: 'none'}}
+                                            />
+
+                                            <p></p>
+                                            
+                                            <p className='function'  style={{display: 'none'}}>Function: {predictor}</p>
+                                            <p className='function'  style={{display: 'none'}}>{nameAcc}: {accuracy}</p>
+
+                                            <div className="button-row">
+                                                <input
+                                                    type="button"
+                                                    value="Download Predictor"
+                                                    id = "download"
+                                                    onClick={buttonDownload}
+                                                    style={{display: 'none'}}
+                                                />
+                                                
+                                                <input
+                                                    id='reset'
+                                                    type="button"
+                                                    value="Reset"
+                                                    onClick={() => {window.location.reload(false)}}
+                                                    style={{display: 'none'}}
+                                                />
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="col-lg-6">
+                                        <div className="graph">
+                                            {this.renderAlgorithmView()}
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                            
+
+                    </div>
                 
-                <span>Import algorithm options with a json file: </span>
-                <input
-                    type="file"
-                    name="opt"
-                    id="opt"
-                    onChange={buttonInputOpt} 
-                />
-
-
-                <p>{data}</p>
-
-                {this.renderAlgorithmView()}
-
-                <input
-                    type="button"
-                    value="Train 🚂"
-                    onClick={buttonTrain}
-                />
-
-                <p></p>
-                <input
-                    type="button"
-                    value="Reset"
-                    onClick={() => {window.location.reload(false)}}
-                />
-
-                <p>Function: {predictor}</p>
-
-                <input
-                    type="button"
-                    value="Download JSON"
-                    id = "download"
-                    onClick={buttonDownload}
-                />
-            </main>
-        </div>
-    );
-  }
+                </main>
+                
+            </div>
+        );
+    }
 }

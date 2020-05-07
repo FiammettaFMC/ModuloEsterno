@@ -1,15 +1,16 @@
 import Strategy from './strategies/Strategy';
 import { observable } from 'mobx';
-import { strategies } from './strategies/Strategies';
+import { strategies, data } from './strategies/Strategies';
 import Predictor from './Predictor';    
+import Data from './strategies/Data';
+
 
 export default class Model {
-    
-    @observable private data: number[][] = [];
+    @observable private data?: Data;
     @observable private predictor: Predictor = new Predictor();
     private strategy?: Strategy;
    
-    public getData(): number[][] {
+    public getData(): Data | undefined {
         return this.data;
     }
 
@@ -19,31 +20,27 @@ export default class Model {
 
     /** Load file and save it in data */
     public setData(input: number[][]): void {
-        this.data = input;
+        if(this.data) this.data.setValue(input);
     }
 
     /** Set the algorithm to use thanks to the Context*/
     public setAlgorithm(alg: string): void {
-        this.predictor.algorithm = alg;
+        this.predictor.setAlg(alg);
         this.strategy = strategies[alg];
+        this.data = data[alg];
     }
 
-    public setOptions(params: object): void {
-        this.predictor.opt = params;
-    }
-
-    public datatoChart(array: number[][]): number[][] | undefined {
-        return this.strategy?.datatoChart(array);
+    public setPredictorOptions(config: string): void {
+        this.predictor.setOpt(config);
     }
 
     /** Save the predictor in function */
     public train(): void {
-        if(this.strategy)
-            this.predictor = this.strategy.train(this.data, this.predictor.opt);
-    }
-
-    public datatoLine(graph: number[][]): number[][] | undefined {
-        return this.strategy?.datatoLine(graph,this.predictor.coefficients);
+        const opt = this.predictor.getOpt();
+        if(this.strategy && this.data && opt){
+            this.predictor = this.strategy.train(this.data, opt);
+            this.data.setPointsLine(this.predictor.getCoef());
+        }    
     }
 
     /** Download predictor as JSON */
@@ -53,4 +50,5 @@ export default class Model {
         const file = new File([text], 'Training.json', { type: 'text/json;charset=utf-8' });
         FileSaver.saveAs(file); // download
     }
+
 }

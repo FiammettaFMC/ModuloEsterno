@@ -1,10 +1,12 @@
 import Strategy from "./../Strategy";
 import Predictor from "../../Predictor";
+import DataSVM from "./DataSVM";
+import OptionSVM from "./OptionSVM";
 
 export default class StrategySVM implements Strategy{
 
     /** SVM predictor: 
-     {
+        {
          N: numero di punti
          D: dimensione dei punti (es. 2,3..)
          b: c della retta in forma implicita
@@ -12,48 +14,49 @@ export default class StrategySVM implements Strategy{
          w: a e b della retta in forma implicita
         }    
     */
-    train(dataset: number[][],options: any): Predictor {
+    train(dataset: DataSVM,options: OptionSVM): Predictor {
         const svm = require('svm');
         const SVM = new svm.SVM();
-        let data: number[][] = [];
-        let labels: number[] = [];
-        dataset.forEach((triple) => {
-            data.push([triple[0],triple[1]]);
-            labels.push(triple[2]);
-        });
-        SVM.train(data,labels,options);
+        SVM.train(dataset.getPoints(),dataset.getLabels(),{C: options.getC(), maxiter: options.getMaxIter(), numpass: options.getNumPass()});
+        const pred = SVM.predict(dataset.getPoints());
+        let CM =[[0,0],[0,0]];
+        for(let i=0;i<dataset.getLabels().length;i++){
+            if(pred[i]>0){ //predicted positive
+                if(dataset.getLabels()[i]===1) { //is positive
+                    CM[0][0]++;
+                }
+                else{ //is negative
+                    CM[0][1]++;
+                }
+            }
+            else{ //predicted negative
+                if(dataset.getLabels()[i]===1) { //is positive
+                    CM[1][0]++;
+                }
+                else{ //is negative
+                    CM[1][1]++;
+                }
+            }
+        }
+        let tp,fp,fn;
+        tp = CM[0][0];
+        // tn = CM[1][1];
+        fp = CM[0][1];
+        fn = CM[1][0];
+        //precision
+        let precision = tp/(tp+fp);
+        //recall/sensitivity
+        let recall = tp/(tp+fn);
+        //F-measure
+        let fMeasure = 2*(precision*recall)/(precision+recall);
+        if( (tp+fp) === 0 || (tp+fn) === 0)
+            fMeasure = 0;
         return new Predictor( 'SVM', 
                               [SVM.b,SVM.w[0],SVM.w[1]], // [ w0, w1, w2 ] = [ c, a, b ]
                               `y = ${-SVM.w[0]/SVM.w[1]}x + ${-SVM.b/SVM.w[0]}`,
-                              options);
-    }
-
-    // Data parsed from Array to point of the graph 
-    datatoChart(data: number[][]): number[][]{
-        let xR: number[] = [];
-        let yR: number[] = [];
-        let xW: number[] = [];
-        let yW: number[] = [];
-        data.forEach((couple) => {
-            if(couple[2] === 1){
-                xR.push(couple[0]);
-                yR.push(couple[1]);
-            } else { // couple[2] === -1
-                xW.push(couple[0]);
-                yW.push(couple[1]);
-            }
-        });
-        return [xR,yR,xW,yW,[],[]];
-    }
-
-    // Data parsed from Array to point of a straight line of the graph
-    datatoLine(graph: number[][],coefficients: number[]): number[][] {
-        let lineY: number[] = [];
-        const lineX: number[] = [...graph[0], ...graph[2]];
-        lineX.forEach((element) => {
-            lineY.push( ( -coefficients[1]/coefficients[2] * element) + -coefficients[0]/coefficients[2] );
-        });
-        return [ graph[0], graph[1], graph[2], graph[3], lineX, lineY ];
+                              options,
+                              fMeasure
+                            );
     }
     
 }
