@@ -1,11 +1,11 @@
 import 'jest';
 import Predictor from '../src/Predictor';
 import Model from '../src/Model';
-import StrategyRL from '../src/strategies/RL/StrategyRL';
+import StrategyRL from '../src/strategies/Regression/RL/StrategyRL';
 import StrategySVM from '../src/strategies/SVM/StrategySVM';
 import ViewModel from '../src/ViewModel';
-import OptionRL from '../src/strategies/RL/OptionRL';
-import DataRL from '../src/strategies/RL/DataRL';
+import OptionRL from '../src/strategies/Regression/OptionR';
+import DataRL from '../src/strategies/Regression/RL/DataRL';
 import OptionSVM from '../src/strategies/SVM/OptionSVM';
 import DataSVM from '../src/strategies/SVM/DataSVM';
 

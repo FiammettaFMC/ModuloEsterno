@@ -1,21 +1,22 @@
 import React from 'react';
 import Plot from 'react-plotlyjs-ts';
-import DataRL from './DataRL';
-import OptionRL from './OptionRL';
+import DataRL from './RL/DataRL';
+import OptionR from './OptionR';
 
 interface Actions {
-    options: OptionRL,
-    graphPt: DataRL
+    options: OptionR,
+    graphPt: DataRL,
+    line: any
 }
 
-export default class AlgorithmViewRL extends React.Component<Actions> {
+export default class AlgorithmViewR extends React.Component<Actions> {
 
     state = {
         prec: 2
     }
-
+    
     render() {
-        const { options, graphPt } = this.props;
+        const { options, graphPt, line } = this.props;
         return (
             <div className="graph-container">  
                 
@@ -38,7 +39,7 @@ export default class AlgorithmViewRL extends React.Component<Actions> {
                             y: graphPt.getYLine(),
                             type: 'lines',
                             mode: 'lines',
-                            line: {color: 'red', width: 3},
+                            line: line,
                             name: '<span style="color: #d8d9da">Retta</span>',
                         }
                     ]}

@@ -127,12 +127,13 @@ export default class ViewModel extends React.Component {
                     buttonInputOpt = {(e) => {this.loadOpt(e.target ? (e.target.files ? e.target.files[0]: null) : null )}} 
                     buttonTrain = {() => this.train()}
                     predictor = {this.model.getPredictor().getFun()}
-                    nameAcc = {this.algorithm === 'RL' ? 'R^2' : 'F-Measure'}
+                    nameAcc = {this.algorithm === 'RL' || 'RLOG' || 'REXP' ? 'R^2' : 'F-Measure'}
                     accuracy = {this.model.getPredictor().getAcc()}
                     buttonDownload = {() => {this.model.downloadPredictor()}}
                     AlgView = {this.state.algView}
                     options = {this.state.options}
                     graphPt = {this.state.graphPt}
+                    line = {this.algorithm === 'RLOG' || 'REXP' ? { color: "red", width: 3, shape: "spline" } : {color:"red",width:3}}
                 />
         );
     }

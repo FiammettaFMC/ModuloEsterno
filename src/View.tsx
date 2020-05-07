@@ -13,7 +13,8 @@ interface Actions {
     buttonDownload: () => void,
     AlgView?: typeof React.Component,
     options: any,
-    graphPt: any
+    graphPt: any,
+    line: any
 }
 
 export default class View extends React.Component<Actions> {
@@ -23,6 +24,7 @@ export default class View extends React.Component<Actions> {
             return (<this.props.AlgView 
                         options = {this.props.options}
                         graphPt = {this.props.graphPt}
+                        line = {this.props.line}
                     />);
         else
             return (<div></div>);
@@ -47,6 +49,8 @@ export default class View extends React.Component<Actions> {
                                 <select className="form-input" disabled={false} id="alg" onChange={selectAlg}>
                                     <option value="RL">Regressione Lineare (RL)</option>
                                     <option value="SVM">Support Vector Machine (SVM)</option>
+                                    <option value="REXP">Regressione Esponenziale (REXP)</option>
+                                    <option value="RLOG">Regressione Logaritmica (RLOG)</option>
                                 </select><br></br>
                             </div>
                             <button onClick={buttonSelectAlg}>Confirm</button>

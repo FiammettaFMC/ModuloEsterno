@@ -1,7 +1,7 @@
 import { DataPoint } from "regression";
 import Data from "../Data";
 
-export default class DataRL implements Data {
+export default class DataR implements Data {
     private points: DataPoint[] = [];
     private xpoints: number[] = [];
     private ypoints: number[] = [];
@@ -18,11 +18,7 @@ export default class DataRL implements Data {
         });
     }
 
-    public setPointsLine(coef: number[]): void {
-        this.xpoints.forEach((element: number) => {
-            this.yline.push( ( coef[0] * element) + coef[1] );
-        });
-    }
+    public setPointsLine(coef: number[]): void {}
 
     public getPoints(): DataPoint[] {
         return this.points;
@@ -38,6 +34,10 @@ export default class DataRL implements Data {
 
     public getYLine(): number[] {
         return this.yline;
+    }
+
+    public setYLine(line: number[]): void {
+        this.yline = line;
     }
 
 }
