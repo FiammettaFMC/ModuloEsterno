@@ -1,6 +1,6 @@
-import DataR from "../DataR";
+import DataRegression from "../DataRegression";
 
-export default class DataRL extends DataR {
+export default class DataRL extends DataRegression {
 
     public setPointsLine(coef: number[]): void {
         let yline: number[] = [];

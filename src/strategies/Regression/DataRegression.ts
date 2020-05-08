@@ -1,7 +1,7 @@
 import { DataPoint } from "regression";
 import Data from "../Data";
 
-export default class DataR implements Data {
+export default class DataRegression implements Data {
     private points: DataPoint[] = [];
     private xpoints: number[] = [];
     private ypoints: number[] = [];

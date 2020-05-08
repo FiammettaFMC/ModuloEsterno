@@ -1,15 +1,15 @@
 import React from 'react';
 import Plot from 'react-plotlyjs-ts';
 import DataRL from './RL/DataRL';
-import OptionR from './OptionR';
+import OptionRegression from './OptionRegression';
 
 interface Actions {
-    options: OptionR,
+    options: OptionRegression,
     graphPt: DataRL,
     line: any
 }
 
-export default class AlgorithmViewR extends React.Component<Actions> {
+export default class AlgorithmViewRegression extends React.Component<Actions> {
 
     state = {
         prec: 2

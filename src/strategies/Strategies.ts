@@ -1,45 +1,45 @@
 import Strategy from './Strategy';
 import StrategyRL from './Regression/RL/StrategyRL';
 import StrategySVM from './SVM/StrategySVM';
-import AlgViewR from './Regression/AlgorithmViewR';
-import AlgViewSVM from './SVM/AlgorithmViewSVM';
+import AlgorithmViewSVM from './SVM/AlgorithmViewSVM';
 import React from 'react';
 import DataRL from './Regression/RL/DataRL';
 import DataSVM from './SVM/DataSVM';
 import Data from './Data';
-import OptionR from './Regression/OptionR';
 import OptionSVM from './SVM/OptionSVM';
 import Option from './Option';
-import StrategyRLOG from './Regression/RLOG/StrategyRLOG';
-import StrategyREXP from './Regression/REXP/StrategyREXP';
-import DataRLOG from './Regression/RLOG/DataRLOG';
-import DataREXP from './Regression/REXP/DataREXP';
+import StrategyRegLog from './Regression/RLOG/StrategyRegLog';
+import DataRegLog from './Regression/RLOG/DataRegLog';
+import DataRegExp from './Regression/REXP/DataRegExp';
+import OptionRegression from './Regression/OptionRegression';
+import StrategyRegExp from './Regression/REXP/StrategyRegExp';
+import AlgorithmViewRegression from './Regression/AlgorithmViewRegression';
 
 
 export const strategies: { [index: string]: Strategy } = {
     'RL': new StrategyRL(),
     'SVM': new StrategySVM(),
-    'RLOG': new StrategyRLOG(),
-    'REXP': new StrategyREXP()
+    'RLOG': new StrategyRegLog(),
+    'REXP': new StrategyRegExp()
 };
 
 export const algview: { [index: string]: typeof React.Component } = {
-    'RL': AlgViewR,
-    'SVM': AlgViewSVM,
-    'RLOG': AlgViewR,
-    'REXP': AlgViewR
+    'RL': AlgorithmViewRegression,
+    'SVM': AlgorithmViewSVM,
+    'RLOG': AlgorithmViewRegression,
+    'REXP': AlgorithmViewRegression
 };
 
 export const data: { [index: string]: Data } = {
     'RL': new DataRL(),
     'SVM': new DataSVM(),
-    'RLOG': new DataRLOG(),
-    'REXP': new DataREXP()
+    'RLOG': new DataRegLog(),
+    'REXP': new DataRegExp()
 };
 
 export const opt: { [index: string]: Option } = {
-    'RL': new OptionR(),
-    'REXP': new OptionR(),
-    'RLOG': new OptionR(),
+    'RL': new OptionRegression(),
+    'REXP': new OptionRegression(),
+    'RLOG': new OptionRegression(),
     'SVM': new OptionSVM()
 };

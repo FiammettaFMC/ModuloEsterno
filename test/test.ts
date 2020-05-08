@@ -4,10 +4,15 @@ import Model from '../src/Model';
 import StrategyRL from '../src/strategies/Regression/RL/StrategyRL';
 import StrategySVM from '../src/strategies/SVM/StrategySVM';
 import ViewModel from '../src/ViewModel';
-import OptionRL from '../src/strategies/Regression/OptionR';
+import OptionRegression from '../src/strategies/Regression/OptionRegression';
 import DataRL from '../src/strategies/Regression/RL/DataRL';
 import OptionSVM from '../src/strategies/SVM/OptionSVM';
 import DataSVM from '../src/strategies/SVM/DataSVM';
+import StrategyRegLog from '../src/strategies/Regression/RLOG/StrategyRegLog';
+import DataRegLog from '../src/strategies/Regression/RLOG/DataRegLog';
+import DataRegExp from '../src/strategies/Regression/REXP/DataRegExp';
+import StrategyRegExp from '../src/strategies/Regression/REXP/StrategyRegExp';
+import DataRegression from '../src/strategies/Regression/DataRegression';
 
 jest.mock('react-plotlyjs-ts',()=>{});
 
@@ -24,11 +29,11 @@ beforeAll(() => {
 //TEST PREDICTOR
 
 test('construnctor', ()=> {
-    let pred = new Predictor('RL',[1,2],'y = 2x +4',new OptionRL(),0.3);
+    let pred = new Predictor('RL',[1,2],'y = 2x +4',new OptionRegression(),0.3);
     expect(pred.getAlg()).toBe('RL');    
     expect(pred.getCoef()).toEqual([1,2]);    
     expect(pred.getFun()).toBe('y = 2x +4');    
-    expect(pred.getOpt()).toEqual(new OptionRL());
+    expect(pred.getOpt()).toEqual(new OptionRegression());
     expect(pred.getAcc()).toBe(0.3);
 });
 
@@ -47,11 +52,11 @@ test('setPredictor',()=>{
     expect(pred.getAlg()).toBe('RL');    
     expect(pred.getCoef()).toEqual([1,2]);    
     expect(pred.getFun()).toBe('y = 2x +4');    
-    expect(pred.getOpt()).toEqual(new OptionRL());
+    expect(pred.getOpt()).toEqual(new OptionRegression());
 });
 
 test('parseStringtoJSONPredictor', ()=> {
-    let pred = new Predictor('RL',[1,2],'y=2x+1',new OptionRL(),0.3);
+    let pred = new Predictor('RL',[1,2],'y=2x+1',new OptionRegression(),0.3);
     expect(pred.toJSON()).toEqual(
 `{
     "GroupName": "ProApes",
@@ -80,7 +85,7 @@ test('setPredictorOptions', ()=> {
         "predFun": "y = 1.3691x + 1.3827",
         "opt": {"order":2,"precision":2}
     }`);
-    expect(model.getPredictor().getOpt()).toEqual(new OptionRL());
+    expect(model.getPredictor().getOpt()).toEqual(new OptionRegression());
 });
 
 test('setData', ()=> {
@@ -96,12 +101,19 @@ test('trainOnModel', ()=> {
     let mod = new Model();
     mod.train();
     model.train();
-    expect(model.getPredictor()).toEqual(new Predictor('RL',[1,0],'y = 1x',new OptionRL(),1));
+    expect(model.getPredictor()).toEqual(new Predictor('RL',[1,0],'y = 1x',new OptionRegression(),1));
 });
 
 test('downloadPredictor',()=>{
     model.downloadPredictor();
 });
+
+// TEST DATAR
+test('getDataR',()=>{
+    let dat = new DataRegression();
+    dat.setPointsLine([0,0]);
+});
+
 
 // TEST DATARL
 test('getDataRL',()=>{
@@ -111,6 +123,26 @@ test('getDataRL',()=>{
     expect(dat.getYPoints()).toEqual([1,2]);
     dat.setPointsLine([1,0]);
     expect(dat.getYLine()).toEqual([1,2]);
+});
+
+// TEST DATARLOG
+test('getDataRLOG',()=>{
+    let dat = new DataRegLog();
+    dat.setValue([[1,0],[2,Math.log(2)]]);
+    expect(dat.getXPoints()).toEqual([1,2]);
+    expect(dat.getYPoints()).toEqual([0,Math.log(2)]);
+    dat.setPointsLine([0,1]);
+    expect(dat.getYLine()).toEqual([0,Math.log(2)]);
+});
+
+// TEST DATAREXP
+test('getDataREXP',()=>{
+    let dat = new DataRegExp();
+    dat.setValue([[0,1],[1,Math.E]]);
+    expect(dat.getXPoints()).toEqual([0,1]);
+    expect(dat.getYPoints()).toEqual([1,Math.E]);
+    dat.setPointsLine([1,1]);
+    expect(dat.getYLine()).toEqual([1,Math.E]);
 });
 
 // TEST DATASVM
@@ -131,14 +163,14 @@ test('getDataSVM',()=>{
 // TEST OPTIONRL
 
 test('setAndgetPrecRL',()=>{
-    let op = new OptionRL();
+    let op = new OptionRegression();
     op.setPrecision(3);
     expect(op.getPrecision()).toBe(3);
     expect(op.getOrder()).toBe(2);
 });
 
 test('importJSONErrorRL',()=>{
-    let op = new OptionRL();
+    let op = new OptionRegression();
     expect(() => {op.setValueFile('{"opt}')}).toThrowError(new Error('Predictor bad formatted'));    
 });
 
@@ -174,9 +206,26 @@ test('trainOnStrategyRL', ()=> {
     let rl = new StrategyRL();
     let dat = new DataRL();
     dat.setValue([[1,1],[2,2]]);
-    expect(rl.train(dat,new OptionRL())).toEqual(new Predictor('RL',[1,0],'y = 1x', new OptionRL(),1));
+    expect(rl.train(dat,new OptionRegression())).toEqual(new Predictor('RL',[1,0],'y = 1x', new OptionRegression(),1));
 });
 
+//TEST STRATEGYRLOG
+
+test('trainOnStrategyRLOG', ()=> {
+    let rl = new StrategyRegLog();
+    let dat = new DataRegLog();
+    dat.setValue([[1,0],[2,Math.log(2)]]);
+    expect(rl.train(dat,new OptionRegression())).toEqual(new Predictor('RLOG',[0,1],'y = 0 + 1 ln(x)', new OptionRegression(),1));
+});
+
+//TEST STRATEGYREXP
+
+test('trainOnStrategyREXP', ()=> {
+    let rl = new StrategyRegExp();
+    let dat = new DataRegExp();
+    dat.setValue([[0,1],[1,Math.E]]);
+    expect(rl.train(dat,new OptionRegression())).toEqual(new Predictor('REXP',[1,1],'y = 1e^(1x)', new OptionRegression(),1));
+});
 
 //TEST STRATEGYSVM
 
