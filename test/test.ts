@@ -237,7 +237,9 @@ test('trainOnStrategySVM', ()=> {
     dat0.setValue([[0,1,1],[1,0,-1]]);
     expect(svm.train(dat0,new OptionSVM())).toEqual(new Predictor('SVM',[0,-1,1],'y = 1x + 0', new OptionSVM(),1));
     dat1.setValue([[0,1,-1],[1,2,1],[2,1,-1],[-1,0,1],[0,-1,-1],[1,0,1]]);
-    expect(svm.train(dat1,new OptionSVM())).toEqual(new Predictor('SVM',[0,-1,1],'y = 1x + 0', new OptionSVM(),2/3));
+    let option = new OptionSVM();
+    option.setNumPass(20);
+    expect(svm.train(dat1,option)).toEqual(new Predictor('SVM',[0,-1,1],'y = 1x + 0', option,2/3));
     dat2.setValue([[0,1,-1],[1,2,-1],[2,1,-1],[-1,0,-1],[0,-1,-1],[1,0,-1],[0,0,-1],[1,1,-1],[2,2,-1],[10,-10,-1]]);
     expect(svm.train(dat2,new OptionSVM())).toEqual(new Predictor('SVM',[0,0,0],'y = NaNx + NaN', new OptionSVM(),0));
 });
@@ -299,8 +301,14 @@ test('trainOnViewModel',() => {
     blob.lastModifiedDate = new Date();
     blob.name = "filename";
     const file = blob as File;
+    const blob1: any = new Blob(['0.2,-5\n0.3,-4\n0.4,-3\n0.6,-2\n1,0\n2,0.6\n3,1.2\n4,1.8\n6,2.6'], { type: "text/html" });
+    blob1.lastModifiedDate = new Date();
+    blob1.name = "filename";
+    const file1 = blob as File;
     vm.setAlgorithm('RL');
     vm.selectAlgorithm();
+    vm.loadData(file1);
+    vm.train();
     vm.loadData(file);
     vm.train();
 });

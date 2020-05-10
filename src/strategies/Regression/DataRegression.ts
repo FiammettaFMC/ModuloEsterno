@@ -8,6 +8,9 @@ export default class DataRegression implements Data {
     private yline: number[] = [];
 
     public setValue(dataset: number[][]): void{
+        this.points = [];
+        this.xpoints = []; 
+        this.ypoints = [];
         dataset.forEach( (p) => {
             let point: DataPoint = [0,0];
             point[0] = p[0];

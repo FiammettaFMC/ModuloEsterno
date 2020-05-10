@@ -105,16 +105,19 @@ export default class ViewModel extends React.Component {
     train(): void {
         if(this.model.getData()){
             this.model.train();
-            this.setState({graphPt: this.model.getData()});
-            let f = document.getElementsByClassName('function');
-            if(f[0] && f[1]) {
-                f[0].setAttribute('style','display: block');
-                f[1].setAttribute('style','display: block');
-            }
-            let r = document.getElementById('reset');
-            if(r) r.setAttribute('style','display: block');
-            let d = document.getElementById('download');
-            if(d) d.setAttribute('style','display: block');
+            if(!this.model.getPredictor().getFun().match(/NaN/)){
+                this.setState({graphPt: this.model.getData()});
+                let f = document.getElementsByClassName('function');
+                if(f[0] && f[1]) {
+                    f[0].setAttribute('style','display: block');
+                    f[1].setAttribute('style','display: block');
+                }
+                let r = document.getElementById('reset');
+                if(r) r.setAttribute('style','display: block');
+                let d = document.getElementById('download');
+                if(d) d.setAttribute('style','display: block');
+            } else 
+                alert('Dataset is not relevant to the algortihm!');
         }
     }
     
