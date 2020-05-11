@@ -1,3 +1,17 @@
+/**
+ * Project: Predire in Grafana
+ * File: DataSVM.ts
+ * Author: Igor Biolcati Rinaldi
+ * Created: 2020-04-24
+ * Version: 3.0.0-1.9
+ * -----------------------------------------------------------------------------------------
+ * Copyright 2020 ProApesGroup.
+ * Licensed under the MIT License. See LICENSE in the project root for license informations.
+ * -----------------------------------------------------------------------------------------
+ * Changelog:
+ * 3.0.0-1.9 - Writing DataSVM class for the algortihm SVM.
+ */
+
 import Data from "../Data";
 
 export default class DataSVM implements Data {

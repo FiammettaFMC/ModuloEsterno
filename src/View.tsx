@@ -1,3 +1,17 @@
+/**
+ * Project: Predire in Grafana
+ * File: View.tsx
+ * Author: Igor Biolcati Rinaldi
+ * Created: 2020-02-20
+ * Version: 3.0.0-1.9
+ * -----------------------------------------------------------------------------------------
+ * Copyright 2020 ProApesGroup.
+ * Licensed under the MIT License. See LICENSE in the project root for license informations.
+ * -----------------------------------------------------------------------------------------
+ * Changelog:
+ * 3.0.0-1.9 - Writing View class for incpsulation of presentation logic.
+ */
+
 import React, { ChangeEvent } from 'react';
 import './App.css';
 
@@ -19,6 +33,7 @@ interface Actions {
 
 export default class View extends React.Component<Actions> {
 
+    // Render the corret AlgorithmView after the algortihm is choosen
     renderAlgorithmView(){
         if(this.props.AlgView)
             return (<this.props.AlgView 

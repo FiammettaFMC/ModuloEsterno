@@ -1,3 +1,18 @@
+/**
+ * Project: Predire in Grafana
+ * File: DataRL.ts
+ * Author: Igor Biolcati Rinaldi
+ * Created: 2020-04-24
+ * Version: 3.0.0-1.9
+ * -----------------------------------------------------------------------------------------
+ * Copyright 2020 ProApesGroup.
+ * Licensed under the MIT License. See LICENSE in the project root for license informations.
+ * -----------------------------------------------------------------------------------------
+ * Changelog:
+ * 3.0.0-1.9 - Writing DataRL class for the algortihm Linear Regression.
+ */
+
+
 import DataRegression from "../DataRegression";
 
 export default class DataRL extends DataRegression {

@@ -1,3 +1,17 @@
+/**
+ * Project: Predire in Grafana
+ * File: Model.ts
+ * Author: Igor Biolcati Rinaldi
+ * Created: 2020-02-20
+ * Version: 3.0.0-1.9
+ * -----------------------------------------------------------------------------------------
+ * Copyright 2020 ProApesGroup.
+ * Licensed under the MIT License. See LICENSE in the project root for license informations.
+ * -----------------------------------------------------------------------------------------
+ * Changelog:
+ * 3.0.0-1.8 - Writing Model class for incpsulation of buisness logic.
+ */
+
 import Strategy from './strategies/Strategy';
 import { observable } from 'mobx';
 import { strategies, data } from './strategies/Strategies';
@@ -18,12 +32,12 @@ export default class Model {
         return this.predictor;
     }
 
-    /** Load file and save it in data */
+    // Save import data array in the correct form of data
     public setData(input: number[][]): void {
         if(this.data) this.data.setValue(input);
     }
 
-    /** Set the algorithm to use thanks to the Context*/
+    // Set the algorithm to use and create the correct Strategy and Data objects
     public setAlgorithm(alg: string): void {
         this.predictor.setAlg(alg);
         this.strategy = strategies[alg];
@@ -34,7 +48,7 @@ export default class Model {
         this.predictor.setOpt(config);
     }
 
-    /** Save the predictor in function */
+    // Train the algortihm with the data and the option, it saves in the predictor and call the method for creating the line
     public train(): void {
         const opt = this.predictor.getOpt();
         if(this.strategy && this.data && opt){
@@ -43,7 +57,7 @@ export default class Model {
         }    
     }
 
-    /** Download predictor as JSON */
+    // Download predictor as JSON
     public downloadPredictor(): void {
         const FileSaver = require('file-saver'); // import file saver
         const text = this.predictor.toJSON();

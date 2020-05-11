@@ -1,3 +1,17 @@
+/**
+ * Project: Predire in Grafana
+ * File: Predictor.ts
+ * Author: Igor Biolcati Rinaldi
+ * Created: 2020-02-21
+ * Version: 3.0.0-1.9
+ * -----------------------------------------------------------------------------------------
+ * Copyright 2020 ProApesGroup.
+ * Licensed under the MIT License. See LICENSE in the project root for license informations.
+ * -----------------------------------------------------------------------------------------
+ * Changelog:
+ * 3.0.0-1.9 - Writing Predictor class for incpsulation of predioctor info.
+ */
+
 import Option from "./strategies/Option";
 import { opt } from "./strategies/Strategies";
 
@@ -53,6 +67,7 @@ export default class Predictor {
         if(this.opt) this.opt.setValueFile(conf);
     }
 
+    // Write the predictor class as a JSON and return the relative string
     toJSON(): string {
         const textFile = 
 `{

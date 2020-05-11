@@ -1,3 +1,17 @@
+/**
+ * Project: Predire in Grafana
+ * File: AlgorithmViewSVM.tsx
+ * Author: Igor Biolcati Rinaldi
+ * Created: 2020-02-27
+ * Version: 3.0.0-1.9
+ * -----------------------------------------------------------------------------------------
+ * Copyright 2020 ProApesGroup.
+ * Licensed under the MIT License. See LICENSE in the project root for license informations.
+ * -----------------------------------------------------------------------------------------
+ * Changelog:
+ * 3.0.0-1.9 - Writing AlgorithmViewSVM class for presentation logic only of the algortihm SVM.
+ */
+
 import React from 'react';
 import Plot from 'react-plotlyjs-ts';
 import DataSVM from './DataSVM';

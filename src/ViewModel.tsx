@@ -1,3 +1,17 @@
+/**
+ * Project: Predire in Grafana
+ * File: ViewModel.tsx
+ * Author: Igor Biolcati Rinaldi
+ * Created: 2020-02-20
+ * Version: 3.0.0-1.9
+ * -----------------------------------------------------------------------------------------
+ * Copyright 2020 ProApesGroup.
+ * Licensed under the MIT License. See LICENSE in the project root for license informations.
+ * -----------------------------------------------------------------------------------------
+ * Changelog:
+ * 3.0.0-1.9 - Writing ViewModel class for manage the Model and the View.
+ */
+
 import React from 'react';
 import './App.css';
 import View from './View';
@@ -22,6 +36,7 @@ export default class ViewModel extends React.Component {
         this.algorithm = 'RL';
     }
 
+    // Check if the the file with dataset is right formatted
     static validateFile(text: string): void{
         const fileReg = /^[-?\d.\d?,-?\d.\d?\n]+/;
         if(!text.match(fileReg)) {
@@ -29,7 +44,7 @@ export default class ViewModel extends React.Component {
         }
     }
 
-    /** Data parsed from string to Array */
+    // Data parsed from string to Array
     static parseCSVtoData(text: string): number[][] {
         /* csv delimiters */
         let row = "\n";
@@ -48,6 +63,7 @@ export default class ViewModel extends React.Component {
         return result;
     }
 
+    // Load the file with dataset and save in the model
     loadData(input: File | null): void {
         const reader = new FileReader(); // declare file reader
         if(input) {
@@ -67,6 +83,7 @@ export default class ViewModel extends React.Component {
         }
     }
 
+    // Load the file with a predictor for extract the options and save them in the model
     loadOpt(input: File | null): void {
         if(input) {
             const reader = new FileReader(); // declare file reader
@@ -87,10 +104,12 @@ export default class ViewModel extends React.Component {
         }
     }
     
+    // Set the algorithm on ViewModel on user changes
     setAlgorithm(alg: string): void{
         this.algorithm = alg;
     }
     
+    // Set the algorithm choosen to the model
     selectAlgorithm(): void {
         this.model.setAlgorithm(this.algorithm);
         this.setState({ algView: algview[this.algorithm] });
@@ -102,6 +121,7 @@ export default class ViewModel extends React.Component {
         if(i) i.setAttribute('style','display: block');
     }
     
+    // Call the train method on model
     train(): void {
         if(this.model.getData()){
             this.model.train();
