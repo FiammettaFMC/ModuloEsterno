@@ -72,7 +72,7 @@ export default class Predictor {
         const textFile = 
 `{
     "GroupName": "ProApes",
-    "Version": "1.5",
+    "Version": "3.0.0-1.9",
     "PluginName": "PredireInGrafana",
     "algorithm": "${this.algorithm}",
     "coefficients": [${this.coefficients}],

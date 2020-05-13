@@ -60,7 +60,7 @@ test('parseStringtoJSONPredictor', ()=> {
     expect(pred.toJSON()).toEqual(
 `{
     "GroupName": "ProApes",
-    "Version": "1.5",
+    "Version": "3.0.0-1.9",
     "PluginName": "PredireInGrafana",
     "algorithm": "RL",
     "coefficients": [1,2],
