@@ -3,13 +3,13 @@
  * File: Model.ts
  * Author: Igor Biolcati Rinaldi
  * Created: 2020-02-20
- * Version: 3.0.0-1.9
+ * Version: 3.0.0-1.10
  * -----------------------------------------------------------------------------------------
  * Copyright 2020 ProApesGroup.
  * Licensed under the MIT License. See LICENSE in the project root for license informations.
  * -----------------------------------------------------------------------------------------
  * Changelog:
- * 3.0.0-1.8 - Writing Model class for incpsulation of buisness logic.
+ * 3.0.0-1.10 - Writing Model class for incpsulation of buisness logic.
  */
 
 import Strategy from './strategies/Strategy';

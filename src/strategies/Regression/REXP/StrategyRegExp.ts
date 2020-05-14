@@ -3,13 +3,13 @@
  * File: StrategyRegExp.ts
  * Author: Igor Biolcati Rinaldi
  * Created: 2020-05-07
- * Version: 3.0.0-1.9
+ * Version: 3.0.0-1.10
  * -----------------------------------------------------------------------------------------
  * Copyright 2020 ProApesGroup.
  * Licensed under the MIT License. See LICENSE in the project root for license informations.
  * -----------------------------------------------------------------------------------------
  * Changelog:
- * 3.0.0-1.9 - Writing StrategyRegExp class for the algortihm Exponential Regression.
+ * 3.0.0-1.10 - Writing StrategyRegExp class for the algortihm Exponential Regression.
  */
 
 import Strategy from "../../Strategy";
