@@ -1,4 +1,4 @@
-# Modulo esterno - Predire in Grafana
+# Modulo esterno - Predire in Grafana ![SonarCloud](https://github.com/FiammettaFMC/ModuloEsterno/workflows/SonarCloud/badge.svg?branch=master)
 ## Descrizione
 **Training Module**: modulo di addestramento esterno.
 - Università degli Studi di Padova
