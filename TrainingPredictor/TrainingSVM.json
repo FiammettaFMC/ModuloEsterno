@@ -1,0 +1,10 @@
+{
+    "GroupName": "ProApes",
+    "Version": "3.0.0-1.9",
+    "PluginName": "PredireInGrafana",
+    "algorithm": "SVM",
+    "coefficients": [-52.34487592603719,-0.280352949011746,0.672019978343272],
+    "predFun": "y = 0.4171794857987689x + -186.7106306909013",
+    "opt": {"C":1,"maxiter":10000,"numpass":12},
+    "accuracy": "0.9720279720279721"
+}

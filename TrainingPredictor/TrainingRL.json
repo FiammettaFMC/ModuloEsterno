@@ -1,0 +1,10 @@
+{
+    "GroupName": "ProApes",
+    "Version": "3.0.0-1.9",
+    "PluginName": "PredireInGrafana",
+    "algorithm": "RL",
+    "coefficients": [1.0693,0.4632],
+    "predFun": "y = 1.0693x + 0.4632",
+    "opt": {"order":2,"precision":4},
+    "accuracy": "0.2947"
+}

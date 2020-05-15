@@ -1,6 +1,0 @@
-{
-    "algorithm": "RL",
-    "coefficients": [1.3691,1.3827],
-    "predFun": "y = 1.3691x + 1.3827",
-    "opt": {"order":2,"precision":4}
-}
