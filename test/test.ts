@@ -108,15 +108,15 @@ test('downloadPredictor',()=>{
     model.downloadPredictor();
 });
 
-// TEST DATAR
-test('getDataR',()=>{
+// TEST DATAREGRESSION
+test('getDataRegression',()=>{
     let dat = new DataRegression();
     dat.setPointsLine([0,0]);
 });
 
 
 // TEST DATARL
-test('getDataRL',()=>{
+test('DataRL',()=>{
     let dat = new DataRL();
     dat.setValue([[1,1],[2,2]]);
     expect(dat.getXPoints()).toEqual([1,2]);
@@ -126,7 +126,7 @@ test('getDataRL',()=>{
 });
 
 // TEST DATARLOG
-test('getDataRLOG',()=>{
+test('DataRLOG',()=>{
     let dat = new DataRegLog();
     dat.setValue([[1,0],[2,Math.log(2)]]);
     expect(dat.getXPoints()).toEqual([1,2]);
@@ -136,7 +136,7 @@ test('getDataRLOG',()=>{
 });
 
 // TEST DATAREXP
-test('getDataREXP',()=>{
+test('DataREXP',()=>{
     let dat = new DataRegExp();
     dat.setValue([[0,1],[1,Math.E]]);
     expect(dat.getXPoints()).toEqual([0,1]);
@@ -146,7 +146,7 @@ test('getDataREXP',()=>{
 });
 
 // TEST DATASVM
-test('getDataSVM',()=>{
+test('DataSVM',()=>{
     let dat = new DataSVM();
     dat.setValue([[0,1,1],[1,0,-1]]);
     expect(dat.getXRPoints()).toEqual([0]);
@@ -160,16 +160,16 @@ test('getDataSVM',()=>{
     expect(dat.getYLine()).toEqual([0,1]);
 });
 
-// TEST OPTIONRL
+// TEST OPTIONREGRESSION
 
-test('setAndgetPrecRL',()=>{
+test('setAndgetPrecRegression',()=>{
     let op = new OptionRegression();
     op.setPrecision(3);
     expect(op.getPrecision()).toBe(3);
     expect(op.getOrder()).toBe(2);
 });
 
-test('importJSONErrorRL',()=>{
+test('importJSONErrorRegression',()=>{
     let op = new OptionRegression();
     expect(() => {op.setValueFile('{"opt}')}).toThrowError(new Error('Predictor bad formatted'));    
 });
