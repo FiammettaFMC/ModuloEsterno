@@ -119,17 +119,17 @@ export default class AlgorithmViewSVM extends React.Component<Actions> {
 				
 					<div className="form">
 						<label className="form-label"><strong>C</strong>:</label>
-						<input type="number" id="C" value={options.getC()} onChange={(event) => {options.setC(Number(event.target.value)); this.setState({opt: options.getC()})}} /> 
+						<input className="form-input" type="number" id="C" value={options.getC()} onChange={(event) => {options.setC(Number(event.target.value)); this.setState({opt: options.getC()})}} /> 
                     </div>
 					
 					<div className="form">
 						<label className="form-label"><strong>Max iterations</strong>:</label>
-						<input type="number" id="maxiter" value={options.getMaxIter()} onChange={(event) => {options.setMaxIter(Number(event.target.value)); this.setState({opt: options.getMaxIter()})}} />
+						<input className="form-input" type="number" id="maxiter" value={options.getMaxIter()} onChange={(event) => {options.setMaxIter(Number(event.target.value)); this.setState({opt: options.getMaxIter()})}} />
                     </div>
 					
 					<div className="form">
 						<label className="form-label"><strong>Number passes</strong>:</label>
-						<input type="number" id="numpas" value={options.getNumPass()} onChange={(event) => {options.setNumPass(Number(event.target.value)); this.setState({opt: options.getNumPass()})}} />
+						<input className="form-input" type="number" id="numpas" value={options.getNumPass()} onChange={(event) => {options.setNumPass(Number(event.target.value)); this.setState({opt: options.getNumPass()})}} />
                     </div>
 					
                 </div>

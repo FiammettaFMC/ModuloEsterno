@@ -98,7 +98,7 @@ export default class AlgorithmViewRegression extends React.Component<Actions> {
 				
 					<div className="form">
 						<span className="form-label"><strong>Precision</strong>: </span>
-						<select value={options.getPrecision()} onChange={(event) => {options.setPrecision(Number(event.target.value)); this.setState({prec: options.getPrecision()})}} >
+						<select className="form-input form-select" value={options.getPrecision()} onChange={(event) => {options.setPrecision(Number(event.target.value)); this.setState({prec: options.getPrecision()})}} >
 							<option value='1'>1</option>
 							<option value='2'>2</option>
 							<option value='3'>3</option>
